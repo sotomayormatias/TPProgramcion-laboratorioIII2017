@@ -64,6 +64,7 @@ class Usuario
 //--CONSTRUCTOR
 	public function __construct($id=NULL, $nombre=NULL, $correo=NULL, $password=NULL, $rol=NULL, $turno=NULL)
 	{
+		$this->id = $id;
         $this->nombre = $nombre;
         $this->correo = $correo;
         $this->password = $password;
@@ -84,7 +85,7 @@ public static function Guardar($obj)
 		$turno = $obj->GetTurno();
 
 		$objConexion = Conexion::getConexion();
-		// $consulta = $objConexion->retornarConsulta("INSERT INTO producto(codigo_barra, nombre, path_foto) VALUES(".$codBarra.", '".$nombre."', '".$pathFoto."')");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, rol, turno) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.")");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -134,7 +135,7 @@ public static function Guardar($obj)
 		$turno = $obj->GetTurno();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = '".$rol."', idTurno = '".$turno."' WHERE idUsuario = ".$id);
+		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = ".$rol.", idTurno = ".$turno." WHERE idUsuario = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)

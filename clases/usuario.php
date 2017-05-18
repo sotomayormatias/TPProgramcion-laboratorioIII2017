@@ -100,40 +100,41 @@ public static function Guardar($obj)
 		$usuarios = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT codigo_barra, nombre, path_foto FROM producto");
+		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario");
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$usuarios[] = new Usuario($fila['codigo_barra'], $fila['nombre'], $fila['path_foto']);
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
 		}
 		
 		return $usuarios;
 	}
 
-	public static function TraerProductoDeBDPorCodigo($codBarra)
+	public static function TraerUsuarioPorId($id)
 	{
-		$ListaDeProductosLeidos = array();
-
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT codigo_barra, nombre, path_foto FROM producto WHERE codigo_barra = ".$codBarra);
+		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idUsuario = ".$id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$producto = new Producto($fila['codigo_barra'], $fila['nombre'], $fila['path_foto']);
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
 		
-		return $producto;
+		return $usuario;
 	}
 
-	public static function ModificarEnBD($obj)
+	public static function Modificar($obj)
 	{
 		$resultado = TRUE;
 		
-		$codBarra = $obj->GetCodBarra();
+		$id = $obj->GetId();
 		$nombre = $obj->GetNombre();
-		$pathFoto = $obj->GetPathFoto();
+		$correo = $obj->GetCorreo();
+		$password = $obj->GetPassword();
+		$rol = $obj->GetRol();
+		$turno = $obj->GetTurno();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE producto SET nombre = '".$nombre."', path_foto = '".$pathFoto."' WHERE codigo_barra = ".$codBarra);
+		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = '".$rol."', idTurno = '".$turno."' WHERE idUsuario = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -144,18 +145,17 @@ public static function Guardar($obj)
 		return $resultado;
 	}
 
-	public static function EliminarDeBD($codBarra)
+	public static function Eliminar($id)
 	{
-		if($codBarra === NULL)
+		if($id === NULL)
 			return FALSE;
 			
 		$resultado = TRUE;
 		
-		$producto = Producto::TraerProductoDeBDPorCodigo($codBarra);
-		unlink("archivos/".$producto->GetPathFoto());
+		$usuario = Usuario::TraerUsuarioPorId($id);
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("DELETE FROM producto WHERE codigo_barra = ".$codBarra);
+		$consulta = $objConexion->retornarConsulta("DELETE FROM usuario WHERE idUsuario = ".$id);
 		$cant = $consulta->execute();
 		
 		if($cant < 1)

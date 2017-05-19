@@ -108,45 +108,54 @@ class Cochera
 
 	public static function TraerTodos()
 	{
-		$usuarios = array();
+		$cocheras = array();
 
 		$objConexion = Conexion::getConexion();
         //TODO: hacer la consulta con los join para traer todos los datos
-		$consulta = $objConexion->retornarConsulta("SELECT nroCochera, nombre, correo, password, idRol, idTurno FROM usuario");
+		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
+													FROM cochera c
+													INNER JOIN tipocochera tc
+													ON tc.idTipo = c.idTipo");
+		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+			$cocheras[] = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		}
 		
-		return $usuarios;
+		return $cocheras;
 	}
 
 	public static function TraerCocheraPorNro($numero)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idUsuario = ".$id);
+		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
+													FROM cochera c
+													INNER JOIN tipocochera tc
+													ON tc.idTipo = c.idTipo
+													WHERE c.nroCochera = ". $numero);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		$cochera = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		
-		return $usuario;
+		return $cochera;
 	}
 
 	public static function Modificar($obj)
 	{
 		$resultado = TRUE;
 		
-		$id = $obj->GetId();
-		$nombre = $obj->GetNombre();
-		$correo = $obj->GetCorreo();
-		$password = $obj->GetPassword();
-		$rol = $obj->GetRol();
-		$turno = $obj->GetTurno();
+		$numero = $obj->GetNumero();
+		$idEstado = $obj->GetEstado();
+		$piso = $obj->GetPiso();
+		$idTipo = $obj->GetTipo();
+		$precioHora = $obj->GetPrecioHora();
+		$precioMediaEstadia = $obj->GetPrecioMediaEstadia();
+		$precioEstadia = $obj->GetPrecioEstadia();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = '".$rol."', idTurno = '".$turno."' WHERE idUsuario = ".$id);
+		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso.", precioHora = ".$precioHora.", precioMediaEstadia = ".$precioMediaEstadia.", precioEstadia = ".$precioEstadia." WHERE nroCochera = ".$numero);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)

@@ -84,34 +84,11 @@ class Cochera
 
 //--------------------------------------------------------------------------------//
 //--METODOS
-// public static function Guardar($obj)
-// 	{
-// 		$resultado = FALSE;
-		
-// 		$nombre = $obj->GetNombre();
-// 		$correo = $obj->GetCorreo();
-// 		$password = $obj->GetPassword();
-// 		$rol = $obj->GetRol();
-// 		$turno = $obj->GetTurno();
-
-// 		$objConexion = Conexion::getConexion();
-// 		$consulta = $objConexion->retornarConsulta("INSERT INTO producto(codigo_barra, nombre, path_foto) VALUES(".$codBarra.", '".$nombre."', '".$pathFoto."')");
-// 		$cant = $consulta->execute();
-		
-// 		if($cant > 0)
-// 		{
-// 			$resultado = TRUE;			
-// 		}
-		
-// 		return $resultado;
-// 	}
-
 	public static function TraerTodos()
 	{
 		$cocheras = array();
 
 		$objConexion = Conexion::getConexion();
-        //TODO: hacer la consulta con los join para traer todos los datos
 		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
 													FROM cochera c
 													INNER JOIN tipocochera tc
@@ -165,26 +142,6 @@ class Cochera
 		
 		return $resultado;
 	}
-
-	// public static function Eliminar($id)
-	// {
-	// 	if($id === NULL)
-	// 		return FALSE;
-			
-	// 	$resultado = TRUE;
-		
-	// 	$usuario = Usuario::TraerUsuarioPorId($id);
-
-	// 	$objConexion = Conexion::getConexion();
-	// 	$consulta = $objConexion->retornarConsulta("DELETE FROM usuario WHERE idUsuario = ".$id);
-	// 	$cant = $consulta->execute();
-		
-	// 	if($cant < 1)
-	// 	{
-	// 		$resultado = FALSE;
-	// 	}
-
-	// 	return $resultado;
-	// }
+	
 //--------------------------------------------------------------------------------//
 }

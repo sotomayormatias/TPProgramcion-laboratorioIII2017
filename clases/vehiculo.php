@@ -57,7 +57,7 @@ public static function Guardar($obj)
 		$color = $obj->GetColor();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("INSERT INTO producto(codigo_barra, nombre, path_foto) VALUES(".$codBarra.", '".$nombre."', '".$pathFoto."')");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO vehiculo(patente, marca, color) VALUES(".$patente.", '".$marca."', '".$color."')");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -70,54 +70,42 @@ public static function Guardar($obj)
 
 	public static function TraerTodos()
 	{
-		$cocheras = array();
+		$vehiculos = array();
 
 		$objConexion = Conexion::getConexion();
-        //TODO: hacer la consulta con los join para traer todos los datos
-		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
-													FROM cochera c
-													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo");
+		$consulta = $objConexion->retornarConsulta("SELECT patente, marca, color FROM vehiculo");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$cocheras[] = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+			$vehiculos[] = new Vehiculo($fila['patente'], $fila['marca'], $fila['color']);
 		}
 		
-		return $cocheras;
+		return $vehiculos;
 	}
 
-	public static function TraerCocheraPorNro($numero)
+	public static function TraerVehiculoPorPatente($patente)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
-													FROM cochera c
-													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo
-													WHERE c.nroCochera = ". $numero);
+		$consulta = $objConexion->retornarConsulta("SELECT patente, marca, color FROM vehiculo WHERE patente = '". $patente ."'");
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$cochera = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+		$vehiculo = new Cochera($fila['patente'], $fila['marca'], $fila['color']);
 		
-		return $cochera;
+		return $vehiculo;
 	}
 
 	public static function Modificar($obj)
 	{
 		$resultado = TRUE;
 		
-		$numero = $obj->GetNumero();
-		$idEstado = $obj->GetEstado();
-		$piso = $obj->GetPiso();
-		$idTipo = $obj->GetTipo();
-		$precioHora = $obj->GetPrecioHora();
-		$precioMediaEstadia = $obj->GetPrecioMediaEstadia();
-		$precioEstadia = $obj->GetPrecioEstadia();
+		$patente = $obj->GetPatente();
+		$marca = $obj->GetMarca();
+		$color = $obj->GetColor();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso.", precioHora = ".$precioHora.", precioMediaEstadia = ".$precioMediaEstadia.", precioEstadia = ".$precioEstadia." WHERE nroCochera = ".$numero);
+		$consulta = $objConexion->retornarConsulta("UPDATE vehiculo SET marca = '".$marca."', color = '".$color."' WHERE patente = ".$patente);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -128,25 +116,23 @@ public static function Guardar($obj)
 		return $resultado;
 	}
 
-	// public static function Eliminar($id)
-	// {
-	// 	if($id === NULL)
-	// 		return FALSE;
+	public static function Eliminar($patente)
+	{
+		if($patente === NULL)
+			return FALSE;
 			
-	// 	$resultado = TRUE;
-		
-	// 	$usuario = Usuario::TraerUsuarioPorId($id);
+		$resultado = TRUE;
 
-	// 	$objConexion = Conexion::getConexion();
-	// 	$consulta = $objConexion->retornarConsulta("DELETE FROM usuario WHERE idUsuario = ".$id);
-	// 	$cant = $consulta->execute();
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("DELETE FROM vehiculo WHERE patente = ".$patente);
+		$cant = $consulta->execute();
 		
-	// 	if($cant < 1)
-	// 	{
-	// 		$resultado = FALSE;
-	// 	}
+		if($cant < 1)
+		{
+			$resultado = FALSE;
+		}
 
-	// 	return $resultado;
-	// }
+		return $resultado;
+	}
 //--------------------------------------------------------------------------------//
 }

@@ -153,8 +153,6 @@ public static function Guardar($obj)
 			
 		$resultado = TRUE;
 		
-		$usuario = Usuario::TraerUsuarioPorId($id);
-
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("DELETE FROM usuario WHERE idUsuario = ".$id);
 		$cant = $consulta->execute();

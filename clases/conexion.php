@@ -4,7 +4,7 @@ class Conexion{
     private $_objetoPDO;
 
     private function __construct(){
-        $this->_objetoPDO = new PDO('mysql:host=localhost;dbname=primerParcial;charset=utf8', 'root', '', array(PDO::ATTR_EMULATE_PREPARES => FALSE, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $this->_objetoPDO = new PDO('mysql:host=localhost;dbname=estacionamiento;charset=utf8', 'root', 'vamolarenga', array(PDO::ATTR_EMULATE_PREPARES => FALSE, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         $this->_objetoPDO->exec("SET CHARACTER SET utf8");
     }
 

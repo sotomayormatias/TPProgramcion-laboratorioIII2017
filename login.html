@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="js/funciones.js"></script>
+
+    <title>Estacionate en esta</title>
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <form onsubmit="validaLogin(); return false;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                        <input type="text" class="form-control" id="emailUser">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                        <input type="password" class="form-control" id="passUser">
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                    <input type="checkbox" id="recordar">Recordarme
+                    </label>
+                </div>
+                <div id="errorLogin">
+                </div>
+                <button type="submit" class="btn btn-default">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

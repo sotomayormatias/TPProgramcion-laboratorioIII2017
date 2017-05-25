@@ -123,6 +123,18 @@ public static function Guardar($obj)
 		return $usuario;
 	}
 
+	public static function TraerUsuarioPorCorreo($correo)
+	{
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE correo = '".$correo."'");
+		$consulta->execute();
+		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		
+		return $usuario;
+	}
+
 	public static function Modificar($obj)
 	{
 		$resultado = TRUE;

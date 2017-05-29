@@ -32,3 +32,91 @@ function validaLogin(){
         alert(response.responseText);
     });
 }
+
+function mostrarEmpleados(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "getGrillaUsuarios"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function mostrarCocheras(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "getGrillaCocheras"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function mostrarVehiculos(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "getGrillaVehiculos"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function formAltaUsuario(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "formAltaUsuario"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function agregarUsuario(){
+    var $usuario = {};
+    $usuario.nombre = $("#nombre").val();
+    $usuario.correo = $("#correo").val();
+    $usuario.turno = $("#turno").val();
+    $usuario.password = $("#password").val();
+    $usuario.rol = 2;
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            usuario: $usuario,
+            accion: "agregarUsuario"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}

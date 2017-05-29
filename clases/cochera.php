@@ -1,8 +1,11 @@
 <?php
+include "estadoCochera.php";
+include "tipoCochera.php";
 class Cochera
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	private $id;
     private $numero;
 	private $estado;
  	private $piso;
@@ -14,6 +17,10 @@ class Cochera
 
 //--------------------------------------------------------------------------------//
 //--GETTERS
+    public function GetId()
+	{
+		return $this->id;
+	}
     public function GetNumero()
 	{
 		return $this->numero;
@@ -71,8 +78,9 @@ class Cochera
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($numero=NULL, $estado=NULL, $piso=NULL, $tipo=NULL, $precioHora=NULL, $precioMediaEstadia=NULL, $precioEstadia=NULL)
+	public function __construct($id=NULL, $numero=NULL, $estado=NULL, $piso=NULL, $tipo=NULL, $precioHora=NULL, $precioMediaEstadia=NULL, $precioEstadia=NULL)
 	{
+		$this->id = $id;
         $this->numero = $numero;
         $this->estado = $estado;
         $this->piso = $piso;
@@ -89,15 +97,28 @@ class Cochera
 		$cocheras = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
+		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
+															c.numero, 
+															c.idEstado, 
+															ec.descripcion as descEstado, 
+															c.idTipo, 
+															tc.descripcion as descTipo,
+															c.piso, 
+															tc.precioHora, 
+															tc.precioMediaEstadia, 
+															tc.precioEstadia 
 													FROM cochera c
 													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo");
+													ON tc.idTipo = c.idTipo
+													INNER JOIN estadocochera ec
+													ON ec.idEstado = c.idEstado");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$cocheras[] = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+			$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
+			$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
+			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo, $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		}
 		
 		return $cocheras;
@@ -106,15 +127,15 @@ class Cochera
 	public static function TraerCocheraPorNro($numero)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT c.nroCochera, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
+		$consulta = $objConexion->retornarConsulta("SELECT c.idCochera, c.numero, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
 													FROM cochera c
 													INNER JOIN tipocochera tc
 													ON tc.idTipo = c.idTipo
-													WHERE c.nroCochera = ". $numero);
+													WHERE c.numero = ". $numero);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$cochera = new Cochera($fila['nroCochera'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		
 		return $cochera;
 	}
@@ -132,7 +153,7 @@ class Cochera
 		$precioEstadia = $obj->GetPrecioEstadia();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso.", precioHora = ".$precioHora.", precioMediaEstadia = ".$precioMediaEstadia.", precioEstadia = ".$precioEstadia." WHERE nroCochera = ".$numero);
+		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso.", precioHora = ".$precioHora.", precioMediaEstadia = ".$precioMediaEstadia.", precioEstadia = ".$precioEstadia." WHERE numero = ".$numero);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)

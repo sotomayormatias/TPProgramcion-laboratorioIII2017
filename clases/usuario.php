@@ -85,7 +85,7 @@ public static function Guardar($obj)
 		$turno = $obj->GetTurno();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, rol, turno) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.")");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, idRol, idTurno) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.")");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -127,6 +127,18 @@ public static function Guardar($obj)
 	{
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE correo = '".$correo."'");
+		$consulta->execute();
+		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		
+		return $usuario;
+	}
+
+	public static function TraerUsuarioPorRol($rol)
+	{
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idRol = ".$rol);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 

@@ -8,12 +8,12 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <script src="js/funciones.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -35,9 +35,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Empleados</a></li>
-                    <li><a href="#">Vehiculos</a></li>
-                    <li><a href="#">Cocheras</a></li>
+                    <li class="active"><a onclick="mostrarEmpleados()">Empleados</a></li>
+                    <li><a onclick="mostrarVehiculos()">Vehiculos</a></li>
+                    <li><a onclick="mostrarCocheras()">Cocheras</a></li>
                     <li><a href="#">Operaciones</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -47,6 +47,9 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+
+    <div id="principal" class="col-md-6 col-md-offset-3">
+    </div>
 </body>
 </html>
 

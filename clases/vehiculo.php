@@ -3,6 +3,7 @@ class Vehiculo
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	private $id;
     private $patente;
 	private $marca;
  	private $color;
@@ -10,6 +11,10 @@ class Vehiculo
 
 //--------------------------------------------------------------------------------//
 //--GETTERS
+    public function GetId()
+	{
+		return $this->id;
+	}
     public function GetPatente()
 	{
 		return $this->patente;
@@ -39,8 +44,9 @@ class Vehiculo
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($patente=NULL, $marca=NULL, $color=NULL)
+	public function __construct($id=NULL, $patente=NULL, $marca=NULL, $color=NULL)
 	{
+		$this->id = $id;
         $this->patente = $patente;
         $this->marca = $marca;
         $this->color = $color;
@@ -73,12 +79,12 @@ public static function Guardar($obj)
 		$vehiculos = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT patente, marca, color FROM vehiculo");
+		$consulta = $objConexion->retornarConsulta("SELECT idVehiculo, patente, marca, color FROM vehiculo");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$vehiculos[] = new Vehiculo($fila['patente'], $fila['marca'], $fila['color']);
+			$vehiculos[] = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
 		}
 		
 		return $vehiculos;
@@ -87,11 +93,11 @@ public static function Guardar($obj)
 	public static function TraerVehiculoPorPatente($patente)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT patente, marca, color FROM vehiculo WHERE patente = '". $patente ."'");
+		$consulta = $objConexion->retornarConsulta("SELECT id, patente, marca, color FROM vehiculo WHERE patente = '". $patente ."'");
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$vehiculo = new Cochera($fila['patente'], $fila['marca'], $fila['color']);
+		$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
 		
 		return $vehiculo;
 	}
@@ -105,7 +111,7 @@ public static function Guardar($obj)
 		$color = $obj->GetColor();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE vehiculo SET marca = '".$marca."', color = '".$color."' WHERE patente = ".$patente);
+		$consulta = $objConexion->retornarConsulta("UPDATE vehiculo SET marca = '".$marca."', color = '".$color."' WHERE patente = '".$patente."'");
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -124,7 +130,7 @@ public static function Guardar($obj)
 		$resultado = TRUE;
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("DELETE FROM vehiculo WHERE patente = ".$patente);
+		$consulta = $objConexion->retornarConsulta("DELETE FROM vehiculo WHERE patente = '".$patente."'");
 		$cant = $consulta->execute();
 		
 		if($cant < 1)

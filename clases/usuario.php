@@ -135,16 +135,19 @@ public static function Guardar($obj)
 		return $usuario;
 	}
 
-	public static function TraerUsuarioPorRol($rol)
+	public static function TraerUsuariosPorRol($rol)
 	{
+		$usuarios = array();
+
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idRol = ".$rol);
 		$consulta->execute();
-		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
-
-		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		}
 		
-		return $usuario;
+		return $usuarios;
 	}
 
 	public static function Modificar($obj)

@@ -1,6 +1,6 @@
 <?php 
 //Solo traigo los usuarios empleados
-$arrayDeEmpleados = Usuario::TraerUsuarioPorRol(2);
+$arrayDeEmpleados = Usuario::TraerUsuariosPorRol(2);
 ?>
 
 <table class="table table-hover table-stripped">

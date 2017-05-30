@@ -53,6 +53,14 @@ switch($accion){
 
         include("modulos/grillaUsuarios.php");
         break;
+    
+    case "borrarEmpleado":
+        $id = isset($_POST['id']) ? $_POST['id'] : NULL;
+        Usuario::Eliminar($id);
+        
+        include("modulos/grillaUsuarios.php");
+        break;
+
     default:
         echo ":(";
 }

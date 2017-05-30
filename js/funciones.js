@@ -120,3 +120,39 @@ function agregarUsuario(){
         alert(response.responseText);
     });
 }
+
+function BorrarEmpleado($id){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            id: $id,
+            accion: "borrarEmpleado"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function EditarEmpleado($id){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            id: $id,
+            accion: "editarEmpleado"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}

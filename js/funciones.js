@@ -6,7 +6,7 @@ function validaLogin(){
     $usuario.password = $("#passUser").val();
 
     $.ajax({
-        url: $url,
+        url: "php/login.php",
         type: "POST",
         dataType: "json",
         data: {
@@ -33,12 +33,24 @@ function validaLogin(){
     });
 }
 
+function desloguear()
+{	
+	$.ajax({
+		url: "php/logout.php",
+		type:"POST",
+        accion: "logout"
+	})
+	.done(function(){
+		location.href = "login.html";
+	});
+}
+
 function mostrarEmpleados(){
     $.ajax({
         url: $url,
         type: "POST",
         data: {
-            accion: "getGrillaUsuarios"
+            accion: "getGrillaEmpleados"
         }
     })
     .done(function(response){
@@ -81,12 +93,12 @@ function mostrarVehiculos(){
     });
 }
 
-function formAltaUsuario(){
+function formAltaEmpleado(){
     $.ajax({
         url: $url,
         type: "POST",
         data: {
-            accion: "formAltaUsuario"
+            accion: "formAltaEmpleado"
         }
     })
     .done(function(response){
@@ -121,6 +133,30 @@ function agregarUsuario(){
     });
 }
 
+function editarUsuario(){
+    var $usuario = {};
+    $usuario.nombre = $("#nombre").val();
+    $usuario.correo = $("#correo").val();
+    $usuario.turno = $("#turno").val();
+    $usuario.password = $("#password").val();
+    $usuario.rol = 2;
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            usuario: $usuario,
+            accion: "editarUsuario"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
 function BorrarEmpleado($id){
 
     $.ajax({
@@ -139,14 +175,31 @@ function BorrarEmpleado($id){
     });
 }
 
-function EditarEmpleado($id){
+function FormEdicionEmpleado($id){
 
     $.ajax({
         url: $url,
         type: "POST",
         data: {
             id: $id,
-            accion: "editarEmpleado"
+            accion: "FormEdicionEmpleado"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function iniciarOperacion(){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "IniciarOperacion"
         }
     })
     .done(function(response){

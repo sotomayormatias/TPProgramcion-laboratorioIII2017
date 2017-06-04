@@ -1,0 +1,25 @@
+#profile-img{
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+#principal{
+    padding-top: 80px;
+}
+
+#principal h1{
+    text-align: center;
+}
+
+table{
+    text-align: center;
+}
+
+table thead th{
+    text-align: center;
+}

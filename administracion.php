@@ -1,36 +1,13 @@
 <?php 
-include "clases/usuario.php";
-include "clases/conexion.php";
-session_start();
+include_once "clases/usuario.php";
+include_once "clases/conexion.php";
+// session_start();
 
 $accion = isset($_POST['accion']) ? $_POST['accion'] : NULL;
 
 switch($accion){
-    case "login":
-        $response["exito"] = TRUE;
-        $response["mensaje"] = "";
-
-        $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
-        
-        $usuario = Usuario::TraerUsuarioPorCorreo($obj->email);
-
-        if($usuario->getCorreo() != $obj->email){
-            $response["exito"] = FALSE;
-            $response["mensaje"] = "El usuario no existe";
-        }
-        else if($usuario->getPassword() != $obj->password){
-            $response["exito"] = FALSE;
-            $response["mensaje"] = "El password es incorrecto";
-        }
-        else {
-            $_SESSION['usuario'] = $usuario;
-        }
-
-        echo json_encode($response);
-        break;
-
-    case "getGrillaUsuarios":
-        include("modulos/grillaUsuarios.php");
+    case "getGrillaEmpleados":
+        include("modulos/grillaEmpleados.php");
         break;
         
     case "getGrillaCocheras":
@@ -41,8 +18,8 @@ switch($accion){
         include("modulos/grillaVehiculos.php");
         break;
 
-    case "formAltaUsuario":
-        include("modulos/altaUsuario.php");
+    case "formAltaEmpleado":
+        include("modulos/altaEmpleado.php");
         break;
 
     case "agregarUsuario":
@@ -51,14 +28,31 @@ switch($accion){
         $usuario = new Usuario(null, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno);
         Usuario::Guardar($usuario);
 
-        include("modulos/grillaUsuarios.php");
+        include("modulos/grillaEmpleados.php");
+        break;
+
+    case "editarUsuario":
+        $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
+
+        $usuario = new Usuario(null, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno);
+        Usuario::Modificar($usuario);
+
+        include("modulos/grillaEmpleados.php");
         break;
     
     case "borrarEmpleado":
         $id = isset($_POST['id']) ? $_POST['id'] : NULL;
         Usuario::Eliminar($id);
         
-        include("modulos/grillaUsuarios.php");
+        include("modulos/grillaEmpleados.php");
+        break;
+    
+    case "FormEdicionEmpleado":
+        include("modulos/edicionEmpleado.php");
+        break;
+
+    case "IniciarOperacion":
+        include("modulos/altaOperacion.php");
         break;
 
     default:

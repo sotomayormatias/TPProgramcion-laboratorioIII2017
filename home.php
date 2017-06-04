@@ -1,56 +1,112 @@
+<?php
+  include_once "clases/usuario.php";
+  include_once "clases/conexion.php";
+
+  session_start();
+  $userId = $_SESSION['usuario'];
+  $usuarioLogueado = Usuario::TraerUsuarioPorId($userId);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <!-- Latest compiled and minified CSS -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+
+    <link href="AdminLTE-master/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="AdminLTE-master/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="AdminLTE-master/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
+    <link href="AdminLTE-master/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/estilos.css" rel="stylesheet" type="text/css" />
+
     <script src="js/funciones.js"></script>
-    <title>Document</title>
-</head>
-<body>
-    <nav class="navbar navbar-default">
+    <title>Park Here</title>
+  </head>
+
+  <body class="skin-blue" data-spy="scroll">
+    <header class="main-header">               
+      <nav class="navbar navbar-static-top">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <img src="img/homeLink.png" width="35" height="35" alt="">
-                </a>
+          <div class="navbar-header">
+            <a href="home.php" class="navbar-brand">Park <b>Here</b>
+              <!--<span><img src="img/millenniumFalcon.png" style="height: 30px;"></span>-->
+              <span><img src="img/deathStar.png" style="height: 30px;"></span>
+              <!--<span><img src="img/parkHereLogo.png" style="height: 30px;"></span>-->
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+              <i class="fa fa-bars"></i>
+            </button>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a onclick="mostrarEmpleados()">Empleados <span class="sr-only">(current)</span></a></li>
+              <li><a onclick="mostrarVehiculos()">Vehiculos</a></li>
+              <li><a onclick="mostrarCocheras()">Cocheras</a></li>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operaciones <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a onclick="iniciarOperacion()">Nueva</a></li>
+                <li><a href="#">Finalizar</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Información</a></li>
+              </ul>
+              </li>
+            </ul>
+            <!--<form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
             </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a onclick="mostrarEmpleados()">Empleados</a></li>
-                    <li><a onclick="mostrarVehiculos()">Vehiculos</a></li>
-                    <li><a onclick="mostrarCocheras()">Cocheras</a></li>
-                    <li><a href="#">Operaciones</a></li>
+            </form>-->
+            <ul class="nav navbar-nav navbar-right">
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="img/loginImage.jpg" class="user-image" alt="User Image"/>
+                  <span class="hidden-xs"><?php echo $usuarioLogueado->getNombre(); ?></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                  <img src="img/loginImage.jpg" class="img-circle" alt="User Image" />
+                  <p>
+                    <?php echo $usuarioLogueado->getNombre(). " - Turno " . $usuarioLogueado->getTurno()->getDescripcion(); ?>
+                    <small>Member since Nov. 2012</small>
+                  </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="center-block">
+                      <a onclick="desloguear()" class="btn btn-default btn-flat btn-block">Finalizar Sesión</a>
+                    </div>
+                  </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>Bienvenido ...</li>
-                    <li><button type="button" class="btn btn-primary">Log Out</button></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-    </nav>
-
+      </nav>
+    </header>
     <div id="principal" class="col-md-6 col-md-offset-3">
+      <?php include "modulos/main.php"; ?>
     </div>
-</body>
+
+    <!-- jQuery 2.1.3 -->
+    <script src="AdminLTE-master/plugins/jQuery/jQuery-2.1.3.min.js"></script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="AdminLTE-master/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- iCheck -->
+    <script src="AdminLTE-master/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+    <script src="js/funciones.js"></script>
+  </body>
 </html>
 
 

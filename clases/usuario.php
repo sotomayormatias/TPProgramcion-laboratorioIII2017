@@ -1,4 +1,7 @@
 <?php
+include_once "rol.php";
+include_once "turno.php";
+
 class Usuario
 {
 //--------------------------------------------------------------------------------//
@@ -101,11 +104,25 @@ public static function Guardar($obj)
 		$usuarios = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario");
+		$consulta = $objConexion->retornarConsulta("SELECT U.idUsuario, 
+															U.nombre, 
+															U.correo, 
+															U.password, 
+															U.idRol, 
+															R.descripcion as descRol,
+															U.idTurno,
+															T.descripcion as descTurno
+													FROM usuario U
+													INNER JOIN rol R
+													ON U.idRol = R.idRol
+													INNER JOIN turno T
+													ON U.idTurno = T.IdTurno");
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+			$rol = new Rol($fila['idRol'], $fila['descRol']);
+			$turno = new Turno($fila['idTurno'], $fila['descTurno']);
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
 		}
 		
 		return $usuarios;
@@ -114,11 +131,26 @@ public static function Guardar($obj)
 	public static function TraerUsuarioPorId($id)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idUsuario = ".$id);
+		$consulta = $objConexion->retornarConsulta("SELECT U.idUsuario, 
+															U.nombre, 
+															U.correo, 
+															U.password, 
+															U.idRol, 
+															R.descripcion as descRol,
+															U.idTurno,
+															T.descripcion as descTurno
+													FROM usuario U
+													INNER JOIN rol R
+													ON U.idRol = R.idRol
+													INNER JOIN turno T
+													ON U.idTurno = T.IdTurno 
+													WHERE U.idUsuario = ".$id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		$rol = new Rol($fila['idRol'], $fila['descRol']);
+		$turno = new Turno($fila['idTurno'], $fila['descTurno']);
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
 		
 		return $usuario;
 	}
@@ -140,11 +172,26 @@ public static function Guardar($obj)
 		$usuarios = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE idRol = ".$rol);
+		$consulta = $objConexion->retornarConsulta("SELECT U.idUsuario, 
+															U.nombre, 
+															U.correo, 
+															U.password, 
+															U.idRol, 
+															R.descripcion as descRol,
+															U.idTurno,
+															T.descripcion as descTurno
+													FROM usuario U
+													INNER JOIN rol R
+													ON U.idRol = R.idRol
+													INNER JOIN turno T
+													ON U.idTurno = T.IdTurno 
+													WHERE U.idRol = ".$rol);
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+			$rol = new Rol($fila['idRol'], $fila['descRol']);
+			$turno = new Turno($fila['idTurno'], $fila['descTurno']);
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
 		}
 		
 		return $usuarios;

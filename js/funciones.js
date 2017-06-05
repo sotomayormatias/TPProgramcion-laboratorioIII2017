@@ -209,3 +209,25 @@ function iniciarOperacion(){
         alert(response.responseText);
     });
 }
+
+function asignarCochera(){
+    $tipoCochera = 1;
+    if($("#esReservada").is(":checked")){
+        $tipoCochera = 2;
+    }
+    
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            tipoCochera: $tipoCochera,
+            accion: "asignarCochera"
+        }
+    })
+    .done(function(response){
+        $("#cocheraOperacion").html("Cochera asignada: <strong>" + response + "</strong>");
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}

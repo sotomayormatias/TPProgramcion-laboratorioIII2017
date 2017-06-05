@@ -22,8 +22,8 @@
     <link href="AdminLTE-master/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="AdminLTE-master/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-    <link href="AdminLTE-master/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
     <link href="AdminLTE-master/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <link href="AdminLTE-master/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
     <link href="css/estilos.css" rel="stylesheet" type="text/css" />
 
     <script src="js/funciones.js"></script>

@@ -77,7 +77,7 @@ class Usuario
 
 //--------------------------------------------------------------------------------//
 //--METODOS
-public static function Guardar($obj)
+	public static function Guardar($obj)
 	{
 		$resultado = FALSE;
 		

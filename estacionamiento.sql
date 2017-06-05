@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-05-2017 a las 05:23:01
+-- Tiempo de generación: 05-06-2017 a las 04:25:23
 -- Versión del servidor: 10.1.13-MariaDB
 -- Versión de PHP: 7.0.6
 
@@ -27,7 +27,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cochera` (
-  `nroCochera` int(11) NOT NULL,
+  `idCochera` int(11) NOT NULL,
+  `numero` int(11) NOT NULL,
   `idEstado` int(11) NOT NULL,
   `idTipo` int(11) NOT NULL,
   `piso` int(11) NOT NULL
@@ -37,19 +38,19 @@ CREATE TABLE `cochera` (
 -- Volcado de datos para la tabla `cochera`
 --
 
-INSERT INTO `cochera` (`nroCochera`, `idEstado`, `idTipo`, `piso`) VALUES
-(1, 1, 2, 1),
-(2, 1, 2, 1),
-(3, 1, 2, 1),
-(4, 1, 1, 1),
-(5, 1, 1, 2),
-(6, 1, 1, 2),
-(7, 1, 1, 2),
-(8, 1, 1, 2),
-(9, 1, 1, 3),
-(10, 1, 1, 3),
-(11, 1, 1, 3),
-(12, 1, 1, 3);
+INSERT INTO `cochera` (`idCochera`, `numero`, `idEstado`, `idTipo`, `piso`) VALUES
+(1, 1, 1, 2, 1),
+(2, 2, 1, 2, 1),
+(3, 3, 1, 2, 1),
+(4, 4, 1, 1, 1),
+(5, 5, 1, 1, 2),
+(6, 6, 1, 1, 2),
+(7, 7, 1, 1, 2),
+(8, 8, 1, 1, 2),
+(9, 9, 1, 1, 3),
+(10, 10, 1, 1, 3),
+(11, 11, 1, 1, 3),
+(12, 12, 1, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -70,6 +71,19 @@ INSERT INTO `estadocochera` (`idEstado`, `descripcion`) VALUES
 (1, 'libre'),
 (2, 'ocupada'),
 (3, 'inhabilitada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `fichaje`
+--
+
+CREATE TABLE `fichaje` (
+  `idFichaje` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `entrada` datetime NOT NULL,
+  `salida` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -150,7 +164,8 @@ CREATE TABLE `turno` (
 INSERT INTO `turno` (`idTurno`, `descripcion`, `ingreso`, `egreso`) VALUES
 (1, 'mañana', '05:00:00', '13:00:00'),
 (2, 'tarde', '13:00:00', '21:00:00'),
-(3, 'noche', '21:00:00', '05:00:00');
+(3, 'noche', '21:00:00', '05:00:00'),
+(4, 'admin', '00:00:00', '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -167,6 +182,14 @@ CREATE TABLE `usuario` (
   `idTurno` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `nombre`, `correo`, `password`, `idRol`, `idTurno`) VALUES
+(1, 'superAdmin', 'superAdmin@admin.com', 'AcaMandoYo', 3, 4),
+(2, 'Empleado mañana', 'empMan@estacionate.com', 'temporal12', 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -174,6 +197,7 @@ CREATE TABLE `usuario` (
 --
 
 CREATE TABLE `vehiculo` (
+  `idVehiculo` int(11) NOT NULL,
   `patente` varchar(7) NOT NULL,
   `marca` int(11) NOT NULL,
   `color` int(11) NOT NULL
@@ -187,13 +211,19 @@ CREATE TABLE `vehiculo` (
 -- Indices de la tabla `cochera`
 --
 ALTER TABLE `cochera`
-  ADD PRIMARY KEY (`nroCochera`);
+  ADD PRIMARY KEY (`idCochera`);
 
 --
 -- Indices de la tabla `estadocochera`
 --
 ALTER TABLE `estadocochera`
   ADD PRIMARY KEY (`idEstado`);
+
+--
+-- Indices de la tabla `fichaje`
+--
+ALTER TABLE `fichaje`
+  ADD PRIMARY KEY (`idFichaje`);
 
 --
 -- Indices de la tabla `operaciones`
@@ -229,17 +259,27 @@ ALTER TABLE `usuario`
 -- Indices de la tabla `vehiculo`
 --
 ALTER TABLE `vehiculo`
-  ADD PRIMARY KEY (`patente`);
+  ADD PRIMARY KEY (`idVehiculo`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
+-- AUTO_INCREMENT de la tabla `cochera`
+--
+ALTER TABLE `cochera`
+  MODIFY `idCochera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+--
 -- AUTO_INCREMENT de la tabla `estadocochera`
 --
 ALTER TABLE `estadocochera`
   MODIFY `idEstado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `fichaje`
+--
+ALTER TABLE `fichaje`
+  MODIFY `idFichaje` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `operaciones`
 --
@@ -259,12 +299,17 @@ ALTER TABLE `tipocochera`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `idTurno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idTurno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `vehiculo`
+--
+ALTER TABLE `vehiculo`
+  MODIFY `idVehiculo` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

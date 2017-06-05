@@ -27,6 +27,6 @@
         <input type="text" name="password" id="password" placeholder="Password" class="form-control" />
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-block" value="Agregar"/>
+        <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Agregar"/>
     </div>
 </form>

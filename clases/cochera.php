@@ -127,17 +127,63 @@ class Cochera
 	public static function TraerCocheraPorNro($numero)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT c.idCochera, c.numero, c.idEstado, c.idTipo, c.piso, tc.precioHora, tc.precioMediaEstadia, tc.precioEstadia 
+		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
+															c.numero, 
+															c.idEstado, 
+															ec.descripcion as descEstado, 
+															c.idTipo, 
+															tc.descripcion as descTipo,
+															c.piso, 
+															tc.precioHora, 
+															tc.precioMediaEstadia, 
+															tc.precioEstadia 
 													FROM cochera c
 													INNER JOIN tipocochera tc
 													ON tc.idTipo = c.idTipo
+													INNER JOIN estadocochera ec
+													ON ec.idEstado = c.idEstado
 													WHERE c.numero = ". $numero);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $fila['idEstado'], $fila['idTipo'],$fila['piso'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+		$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
+		$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
+		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo,  $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		
 		return $cochera;
+	}
+
+	public static function TraerCocherasLibres($tipoCochera){
+		$cocheras = array();
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
+															c.numero, 
+															c.idEstado, 
+															ec.descripcion as descEstado, 
+															c.idTipo, 
+															tc.descripcion as descTipo,
+															c.piso, 
+															tc.precioHora, 
+															tc.precioMediaEstadia, 
+															tc.precioEstadia 
+													FROM cochera c
+													INNER JOIN tipocochera tc
+													ON tc.idTipo = c.idTipo
+													INNER JOIN estadocochera ec
+													ON ec.idEstado = c.idEstado
+													WHERE c.idTipo = ". $tipoCochera .
+													" AND c.idEstado = 1");
+		
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
+			$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
+			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo, $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+		}
+		
+		return $cocheras;
 	}
 
 	public static function Modificar($obj)

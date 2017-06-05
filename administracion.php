@@ -1,6 +1,7 @@
 <?php 
 include_once "clases/usuario.php";
 include_once "clases/conexion.php";
+include_once "clases/cochera.php";
 // session_start();
 
 $accion = isset($_POST['accion']) ? $_POST['accion'] : NULL;
@@ -53,6 +54,13 @@ switch($accion){
 
     case "IniciarOperacion":
         include("modulos/altaOperacion.php");
+        break;
+
+    case "asignarCochera":
+        $tipo = isset($_POST['tipoCochera']) ? $_POST['tipoCochera'] : NULL;
+        $cocheras = Cochera::TraerCocherasLibres($tipo);
+        $posAleatoria = rand(0, count($cocheras) - 1);
+        echo ($cocheras[$posAleatoria])->getNumero();
         break;
 
     default:

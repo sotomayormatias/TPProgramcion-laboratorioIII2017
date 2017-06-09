@@ -14,11 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
-
     <link href="AdminLTE-master/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="AdminLTE-master/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
@@ -48,7 +43,9 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a onclick="mostrarEmpleados()">Empleados <span class="sr-only">(current)</span></a></li>
+              <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
+                <li class="active"><a onclick="mostrarEmpleados()">Empleados <span class="sr-only">(current)</span></a></li>
+              <?php } ?>
               <li><a onclick="mostrarVehiculos()">Vehiculos</a></li>
               <li><a onclick="mostrarCocheras()">Cocheras</a></li>
               <li class="dropdown">
@@ -56,8 +53,10 @@
               <ul class="dropdown-menu" role="menu">
                 <li><a onclick="iniciarOperacion()">Nueva</a></li>
                 <li><a href="#">Finalizar</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Información</a></li>
+                <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
+                  <li class="divider"></li>
+                  <li><a href="#">Información</a></li>
+                <?php } ?>
               </ul>
               </li>
             </ul>

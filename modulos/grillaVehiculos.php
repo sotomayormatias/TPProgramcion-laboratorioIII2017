@@ -1,5 +1,5 @@
 <?php 
-include "clases/vehiculo.php";
+include_once "clases/vehiculo.php";
 $arrayDeVehiculos = Vehiculo::TraerTodos();
 
 if(count($arrayDeVehiculos) > 0){

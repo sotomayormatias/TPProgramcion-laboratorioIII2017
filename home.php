@@ -96,7 +96,7 @@
       </nav>
     </header>
     <div id="principal" class="col-md-6 col-md-offset-3">
-      <?php include "modulos/main.php"; ?>
+      <?php include("modulos/main.php"); ?>
     </div>
 
     <!-- jQuery 2.1.3 -->

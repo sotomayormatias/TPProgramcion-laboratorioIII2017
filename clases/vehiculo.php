@@ -63,7 +63,7 @@ public static function Guardar($obj)
 		$color = $obj->GetColor();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("INSERT INTO vehiculo(patente, marca, color) VALUES(".$patente.", '".$marca."', '".$color."')");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO vehiculo(patente, marca, color) VALUES('".$patente."', '".$marca."', '".$color."')");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -93,7 +93,7 @@ public static function Guardar($obj)
 	public static function TraerVehiculoPorPatente($patente)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT id, patente, marca, color FROM vehiculo WHERE patente = '". $patente ."'");
+		$consulta = $objConexion->retornarConsulta("SELECT idVehiculo, patente, marca, color FROM vehiculo WHERE patente = '". $patente ."'");
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 

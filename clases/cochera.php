@@ -1,6 +1,6 @@
 <?php
-include "estadoCochera.php";
-include "tipoCochera.php";
+include_once "estadoCochera.php";
+include_once "tipoCochera.php";
 class Cochera
 {
 //--------------------------------------------------------------------------------//
@@ -184,6 +184,27 @@ class Cochera
 		}
 		
 		return $cocheras;
+	}
+
+	public function CambiarEstado()
+	{
+		$resultado = TRUE;
+
+		$objConexion = Conexion::getConexion();
+		if($this->GetEstado()->GetId() == 1){
+			$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = 2 WHERE idCochera = " .$this->GetId());
+		}
+		else {
+			$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = 1 WHERE idCochera = " .$this->GetId());
+		}
+		$cant = $consulta->execute();
+			
+		if($cant < 1)
+		{
+			$resultado = FALSE;
+		}
+		
+		return $resultado;
 	}
 
 	public static function Modificar($obj)

@@ -33,7 +33,7 @@
         <img id="profile-img" src="img/loginImage.jpg">
         <form onsubmit="validaLogin(); return false;">
           <div class="form-group has-feedback">
-            <input id="emailUser" type="email" class="form-control" placeholder="Email"/>
+            <input id="emailUser" type="email" class="form-control" placeholder="Email" value="<?php if(isset($_COOKIE['usuario'])) echo $_COOKIE['usuario']; ?>"/>
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
@@ -44,7 +44,7 @@
             <div class="col-xs-8">    
               <div class="checkbox icheck">
                 <label>
-                  <input type="checkbox"> Recordarme
+                  <input type="checkbox" id="recordarme"> Recordarme
                 </label>
               </div>                        
             </div><!-- /.col -->

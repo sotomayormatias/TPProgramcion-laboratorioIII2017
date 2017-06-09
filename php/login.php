@@ -7,6 +7,7 @@
     $response["mensaje"] = "";
 
     $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
+    $recordar = isset($_POST['recordar']) ? $_POST['recordar'] : NULL;
     
     $usuario = Usuario::TraerUsuarioPorCorreo($obj->email);
 
@@ -20,6 +21,12 @@
     }
     else {
         $_SESSION['usuario'] = $usuario->getId();
+        if($recordar == "true") {
+			setcookie("usuario", $usuario->getCorreo(), time() + 3600, "/");
+		}
+		else {
+			setcookie("usuario", "", time() + 3600, "/");
+		}
     }
 
     echo json_encode($response);

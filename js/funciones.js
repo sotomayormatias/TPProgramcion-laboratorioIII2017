@@ -4,6 +4,7 @@ function validaLogin(){
     var $usuario = {};
     $usuario.email = $("#emailUser").val();
     $usuario.password = $("#passUser").val();
+    var $recordar = $("#recordarme").is(':checked');
 
     $.ajax({
         url: "php/login.php",
@@ -11,7 +12,7 @@ function validaLogin(){
         dataType: "json",
         data: {
             usuario: $usuario,
-            accion: "login"
+            recordar: $recordar
         },
         beforeSend: function(){
             $("#emailUser").prop("readonly", true);
@@ -41,7 +42,7 @@ function desloguear()
         accion: "logout"
 	})
 	.done(function(){
-		location.href = "login.html";
+		location.href = "index.php";
 	});
 }
 
@@ -225,7 +226,37 @@ function asignarCochera(){
         }
     })
     .done(function(response){
-        $("#cocheraOperacion").html("Cochera asignada: <strong>" + response + "</strong>");
+        if(response == 0){
+            $("#cocheraOperacion").html("No hay cocheras libres.");
+        }
+        else {
+            $("#cocheraOperacion").html("Cochera asignada: <span id='nroCochera'><strong>" + response + "</strong></span>");
+        }
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function agregarOperacion($usuario){
+    var $vehiculo = {};
+    $vehiculo.patente = $("#patente").val();
+    $vehiculo.marca = $("#marca").val();
+    $vehiculo.color = $("#color").val();
+    $nroCochera = $("#nroCochera").text();
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            vehiculo: $vehiculo,
+            nroCochera: $nroCochera,
+            usuario: $usuario,
+            accion: "agregarOperacion"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
     })
     .fail(function(response){
         alert(response.responseText);

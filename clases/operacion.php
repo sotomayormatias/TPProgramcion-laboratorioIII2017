@@ -101,7 +101,7 @@ class Operacion
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("SELECT 	idOperacion, 
 															idCochera, 
-															patenteVehiculo, 
+															idVehiculo, 
 															costo, 
 															ingreso, 
 															egreso,
@@ -112,7 +112,7 @@ class Operacion
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['patenteVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['idVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		}
 		
 		return $operaciones;
@@ -123,7 +123,7 @@ class Operacion
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("SELECT 	idOperacion, 
 															idCochera, 
-															patenteVehiculo, 
+															idVehiculo, 
 															costo, 
 															ingreso, 
 															egreso,
@@ -134,7 +134,7 @@ class Operacion
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$operacion = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['patenteVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+		$operacion = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['idVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		
 		return $operacion;
 	}
@@ -153,7 +153,7 @@ class Operacion
 		$idEmpleadoEgreso = $obj->GetEmpleadoEgreso();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE operaciones SET idCochera = ".$idCochera.", patenteVehiculo = '".$vehiculo."', costo = ".$costo.", ingreso = ".$ingreso.", egreso = ".$egreso.", idEmpleadoIngreso = ".$idEmpeladoIngreso.", idEmpleadoEgreso = ".$idEmpleadoEgreso." WHERE idOperacion = ".$id);
+		$consulta = $objConexion->retornarConsulta("UPDATE operaciones SET idCochera = ".$idCochera.", idVehiculo = '".$vehiculo."', costo = ".$costo.", ingreso = ".$ingreso.", egreso = ".$egreso.", idEmpleadoIngreso = ".$idEmpeladoIngreso.", idEmpleadoEgreso = ".$idEmpleadoEgreso." WHERE idOperacion = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -168,16 +168,24 @@ class Operacion
 	{
 		$resultado = FALSE;
 		
-		$idCochera = $obj->GetCochera();
+		$cochera = $obj->GetCochera();
 		$vehiculo = $obj->GetVehiculo();
 		$costo = $obj->GetCosto();
-		$ingreso = $obj->GetIngreso();
-		$egreso = $obj->GetEgreso();
+		$ingreso = "'" .$obj->GetIngreso(). "'";
+		$egreso = $obj->GetEgreso() != null ? "'" .$obj->GetEgreso(). "'" : "null";
 		$idEmpleadoIngreso = $obj->GetEmpleadoIngreso();
-		$idEmpleadoEgreso = $obj->GetEmpleadoEgreso();
+		$idEmpleadoEgreso = $obj->GetEmpleadoEgreso() != null ? $obj->GetEmpleadoEgreso() : "null";
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("INSERT INTO operaciones(idCochera, patenteVehiculo, costo, ingreso, egreso, idEmpleadoIngreso, idEmpleadoEgreso) VALUES(".$idCochera.", '".$vehiculo."', ".$costo.", ".$ingreso.", ".$egreso.", ".$idEmpleadoIngreso.", ".$idEmpleadoEgreso.")");
+		//Agrego el vehiculo
+		Vehiculo::Guardar($vehiculo);
+		$idVehiculo = Vehiculo::TraerVehiculoPorPatente($vehiculo->GetPatente())->GetId();
+
+		//Cambio el estado de la cochera
+		$cochera->CambiarEstado();
+
+		//Agrego la operacion
+		$consulta = $objConexion->retornarConsulta("INSERT INTO operaciones(idCochera, idVehiculo, costo, ingreso, egreso, idEmpleadoIngreso, idEmpleadoEgreso) VALUES(".$cochera->getId().", ".$idVehiculo.", ".$costo.", ".$ingreso.", ".$egreso.", ".$idEmpleadoIngreso.", ".$idEmpleadoEgreso.")");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)

@@ -1,5 +1,5 @@
 <?php 
-include "clases/cochera.php";
+include_once "clases/cochera.php";
 $arrayDeCocheras = Cochera::TraerTodos();
 ?>
 

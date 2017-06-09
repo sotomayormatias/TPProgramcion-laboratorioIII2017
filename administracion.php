@@ -2,7 +2,10 @@
 include_once "clases/usuario.php";
 include_once "clases/conexion.php";
 include_once "clases/cochera.php";
+include_once "clases/vehiculo.php";
+include_once "clases/operacion.php";
 // session_start();
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $accion = isset($_POST['accion']) ? $_POST['accion'] : NULL;
 
@@ -59,8 +62,26 @@ switch($accion){
     case "asignarCochera":
         $tipo = isset($_POST['tipoCochera']) ? $_POST['tipoCochera'] : NULL;
         $cocheras = Cochera::TraerCocherasLibres($tipo);
-        $posAleatoria = rand(0, count($cocheras) - 1);
-        echo ($cocheras[$posAleatoria])->getNumero();
+        if(count($cocheras) > 0){
+            $posAleatoria = rand(0, count($cocheras) - 1);
+            echo $cocheras[$posAleatoria]->getNumero();
+        }
+        else {
+            echo 0;
+        }
+        break;
+
+    case "agregarOperacion":
+        $obj = isset($_POST['vehiculo']) ? json_decode(json_encode($_POST['vehiculo'])) : NULL;
+        $vehiculo = new Vehiculo(null, $obj->patente, $obj->marca, $obj->color);
+
+        $nroCochera = isset($_POST['nroCochera']) ? $_POST['nroCochera'] : NULL;
+        $cochera = Cochera::TraerCocheraPorNro($nroCochera);
+
+        $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : NULL;
+        $operacion = new Operacion(null, $cochera, $vehiculo, 0, date("Y-m-d H:i:s"), null, $usuario, null);
+        Operacion::Guardar($operacion);
+        include("modulos/grillaCocheras.php");
         break;
 
     default:

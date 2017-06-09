@@ -1,9 +1,10 @@
 <?php 
     // include_once "clases/turno.php";
     // include_once "clases/rol.php";
+    session_start();
 ?>
 
-<form method="POST" onsubmit="agregarOperacion(); return false;">
+<form method="POST" onsubmit="agregarOperacion(<?php echo $_SESSION['usuario']; ?>); return false;">
     <div class="form-group">
         <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" />
     </div>

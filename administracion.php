@@ -5,7 +5,6 @@ include_once "clases/cochera.php";
 include_once "clases/vehiculo.php";
 include_once "clases/operacion.php";
 // session_start();
-date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $accion = isset($_POST['accion']) ? $_POST['accion'] : NULL;
 
@@ -72,6 +71,7 @@ switch($accion){
         break;
 
     case "agregarOperacion":
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         $obj = isset($_POST['vehiculo']) ? json_decode(json_encode($_POST['vehiculo'])) : NULL;
         $vehiculo = new Vehiculo(null, $obj->patente, $obj->marca, $obj->color);
 

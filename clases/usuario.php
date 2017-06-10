@@ -238,5 +238,24 @@ class Usuario
 
 		return $resultado;
 	}
+
+	public function FicharIngreso(){
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+		$idUsuario = $this->GetId();
+		$entrada = date("Y-m-d H:i:s");
+
+		$resultado = TRUE;
+		
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("INSERT INTO fichaje(idUsuario, fechaLogin) VALUES(" .$idUsuario. ", '" .$entrada. "')");
+		$cant = $consulta->execute();
+		
+		if($cant < 1)
+		{
+			$resultado = FALSE;
+		}
+
+		return $resultado;
+	}
 //--------------------------------------------------------------------------------//
 }

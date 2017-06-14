@@ -299,13 +299,14 @@ function filtrarOperacion(){
     });
 }
 
-function finalizarOperacion($idOperacion){
+function finalizarOperacion($idOperacion, $idUsuario){
 
     $.ajax({
         url: $url,
         type: "POST",
         data: {
             idOperacion: $idOperacion,
+            idUsuario: $idUsuario,
             accion: "finalizarOperacion"
         }
     })

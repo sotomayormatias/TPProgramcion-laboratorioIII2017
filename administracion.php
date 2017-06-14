@@ -93,7 +93,9 @@ switch($accion){
         break;
 
     case "finalizarOperacion":
-
+        $usuario = isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL;
+        $idOperacion = isset($_POST['idOperacion']) ? $_POST['idOperacion'] : NULL;
+        //TODO: falta llamar al metodo modificar
         break;
 
     default:

@@ -84,6 +84,18 @@ switch($accion){
         include("modulos/grillaCocheras.php");
         break;
 
+    case "filtrarOperacion":
+        include("modulos/filtroOperaciones.php");
+        break;
+
+    case "traerOperaciones":
+        include("modulos/grillaOperaciones.php");
+        break;
+
+    case "finalizarOperacion":
+
+        break;
+
     default:
         echo ":(";
 }

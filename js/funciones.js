@@ -262,3 +262,57 @@ function agregarOperacion($usuario){
         alert(response.responseText);
     });
 }
+
+function traerOperaciones(){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerOperaciones"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function filtrarOperacion(){
+    var $patente = $("#patente").val();
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            patente: $patente,
+            accion: "filtrarOperacion"
+        }
+    })
+    .done(function(response){
+        $("#operaciones").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function finalizarOperacion($idOperacion){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            idOperacion: $idOperacion,
+            accion: "finalizarOperacion"
+        }
+    })
+    .done(function(response){
+        $("#operaciones").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}

@@ -99,20 +99,27 @@ class Operacion
 		$operaciones = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	idOperacion, 
-															idCochera, 
-															idVehiculo, 
-															costo, 
-															ingreso, 
-															egreso,
-															idEmpleadoIngreso, 
-															idEmpleadoEgreso
-													FROM operaciones");
+		$consulta = $objConexion->retornarConsulta("SELECT 	O.idOperacion, 
+															O.idCochera, 
+															O.idVehiculo, 
+															V.patente,
+															V.marca,
+															V.color,
+															O.costo, 
+															O.ingreso, 
+															O.egreso,
+															O.idEmpleadoIngreso, 
+															O.idEmpleadoEgreso
+													FROM operaciones O
+													INNER JOIN vehiculo V
+													ON O.idVehiculo = V.idVehiculo
+													WHERE O.egreso is NULL");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['idVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+			$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
+			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		}
 		
 		return $operaciones;
@@ -137,6 +144,38 @@ class Operacion
 		$operacion = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['idVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		
 		return $operacion;
+	}
+
+
+	public static function TraerOperacionPorPatente($patente)
+	{
+		$operaciones = array();
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT 	O.idOperacion, 
+															O.idCochera, 
+															O.idVehiculo, 
+															V.patente,
+															V.marca,
+															V.color,
+															O.costo, 
+															O.ingreso, 
+															O.egreso,
+															O.idEmpleadoIngreso, 
+															O.idEmpleadoEgreso
+													FROM operaciones O
+													INNER JOIN vehiculo V
+													ON O.idVehiculo = V.idVehiculo
+													WHERE V.patente = '". $patente.
+														"' OR '" .$patente. "' = '' AND O.egreso is NULL");
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
+			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+		}
+		
+		return $operaciones;
 	}
 
 	public static function Modificar($obj)

@@ -52,7 +52,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operaciones <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a onclick="iniciarOperacion()">Nueva</a></li>
-                <li><a href="#">Finalizar</a></li>
+                <li><a onclick="traerOperaciones()">Finalizar</a></li>
                 <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
                   <li class="divider"></li>
                   <li><a href="#">Información</a></li>

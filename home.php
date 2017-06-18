@@ -21,7 +21,6 @@
     <link href="AdminLTE-master/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
     <link href="css/estilos.css" rel="stylesheet" type="text/css" />
 
-    <script src="js/funciones.js"></script>
     <title>Park Here</title>
   </head>
 
@@ -97,6 +96,23 @@
     <div id="principal" class="col-md-6 col-md-offset-3">
       <?php include("modulos/main.php"); ?>
     </div>
+
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Finalizar Operación</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="finalizar">Finalizar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
 
     <!-- jQuery 2.1.3 -->
     <script src="AdminLTE-master/plugins/jQuery/jQuery-2.1.3.min.js"></script>

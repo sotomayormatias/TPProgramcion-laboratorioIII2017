@@ -21,6 +21,7 @@
     }
     else {
         $_SESSION['usuario'] = $usuario->getId();
+        $response['usuario'] = $usuario->getId();
         if($recordar == "true") {
 			setcookie("usuario", $usuario->getCorreo(), time() + 3600, "/");
 		}

@@ -128,20 +128,22 @@ class Operacion
 	public static function TraerOperacionPorId($id)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	idOperacion, 
-															idCochera, 
-															idVehiculo, 
-															costo, 
-															ingreso, 
-															egreso,
-															idEmpleadoIngreso, 
-															idEmpleadoEgreso
-													FROM operaciones
+		$consulta = $objConexion->retornarConsulta("SELECT 	O.idOperacion, 
+															O.idCochera, 
+															O.idVehiculo,
+															O.costo, 
+															O.ingreso, 
+															O.egreso,
+															O.idEmpleadoIngreso, 
+															O.idEmpleadoEgreso
+													FROM operaciones O
 													WHERE idOperacion = ". $id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$operacion = new Operacion($fila['idOperacion'], $fila['idCochera'], $fila['idVehiculo'], $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+		$cochera = Cochera::TraerCocheraPorId($fila['idCochera']);
+		$vehiculo = Vehiculo::TraerVehiculoPorId($fila['idVehiculo']);
+		$operacion = new Operacion($fila['idOperacion'], $cochera, $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		
 		return $operacion;
 	}
@@ -154,25 +156,21 @@ class Operacion
 		$objConexion = Conexion::getConexion();
 		$consulta = $objConexion->retornarConsulta("SELECT 	O.idOperacion, 
 															O.idCochera, 
-															O.idVehiculo, 
-															V.patente,
-															V.marca,
-															V.color,
+															O.idVehiculo,
 															O.costo, 
 															O.ingreso, 
 															O.egreso,
 															O.idEmpleadoIngreso, 
 															O.idEmpleadoEgreso
 													FROM operaciones O
-													INNER JOIN vehiculo V
-													ON O.idVehiculo = V.idVehiculo
 													WHERE V.patente = '". $patente.
 														"' OR '" .$patente. "' = '' AND O.egreso is NULL");
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
-			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+			$cochera = Cochera::TraerCocheraPorId($fila['idCochera']);
+			$vehiculo = Vehiculo::TraerVehiculoPorId($fila['idVehiculo']);
+			$operaciones[] = new Operacion($fila['idOperacion'], $cochera, $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		}
 		
 		return $operaciones;
@@ -183,7 +181,7 @@ class Operacion
 		$resultado = TRUE;
 		
 		$id = $obj->GetId();
-		$idCochera = $obj->GetCochera();
+		$cochera = $obj->GetCochera();
 		$vehiculo = $obj->GetVehiculo();
 		$costo = $obj->GetCosto();
 		$ingreso = $obj->GetIngreso();
@@ -192,7 +190,15 @@ class Operacion
 		$idEmpleadoEgreso = $obj->GetEmpleadoEgreso();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE operaciones SET idCochera = ".$idCochera.", idVehiculo = '".$vehiculo."', costo = ".$costo.", ingreso = ".$ingreso.", egreso = ".$egreso.", idEmpleadoIngreso = ".$idEmpeladoIngreso.", idEmpleadoEgreso = ".$idEmpleadoEgreso." WHERE idOperacion = ".$id);
+		$consulta = $objConexion->retornarConsulta("UPDATE operaciones 
+													SET idCochera = ".$cochera->GetId().
+														", idVehiculo = ".$vehiculo->GetId().
+														", costo = ".$costo.
+														", ingreso = '".$ingreso.
+														"', egreso = '".$egreso.
+														"', idEmpleadoIngreso = ".$idEmpleadoIngreso.
+														", idEmpleadoEgreso = ".$idEmpleadoEgreso.
+														" WHERE idOperacion = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -233,6 +239,34 @@ class Operacion
 		}
 		
 		return $resultado;
+	}
+
+	public static function calcularCosto($id){
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+		
+		$operacion = Operacion::TraerOperacionPorId($id);
+		$cochera = $operacion->getCochera();
+		$costo = 0;
+		$fechaIngreso = $operacion->GetIngreso();
+		$hoy = date("Y-m-d H:i:s");
+		$tiempo = (strtotime($hoy) - strtotime($fechaIngreso)) / 3600;
+
+		if($tiempo <= 1){
+			$costo = $cochera->GetTipo()->getPrecioHora();
+		}
+		else if($tiempo > 1 && $tiempo <= 12){
+			$costo = $cochera->GetTipo()->getPrecioMediaEstadia();
+		}
+		else{
+			$cantDias = $tiempo / 24;
+			if($cantDias - round($cantDias) > 0){
+				$costo = ($cochera->GetTipo()->getPrecioEstadia() * floor($cantDias)) + $cochera->GetTipo()->getPrecioMediaEstadia();
+			}
+			else{
+				$costo = $cochera->GetTipo()->getPrecioEstadia() * ceil($cantDias);
+			}
+		}
+		return $costo;
 	}
 	
 //--------------------------------------------------------------------------------//

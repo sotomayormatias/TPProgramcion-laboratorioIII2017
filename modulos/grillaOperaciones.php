@@ -32,7 +32,7 @@
                     <td>".$operacion->getVehiculo()->getMarca()."</td>
                     <td>".$operacion->getVehiculo()->getColor()."</td>
                     <td>".$operacion->getIngreso()."</td>
-                    <td><a onclick='finalizarOperacion(".$operacion->getId().", <?php echo $_SESSION['usuario']; ?>)' class='btn btn-danger btn-sm btn-flat'><span class='glyphicon glyphicon-off'></span>  Finalizar</a></td>
+                    <td><a onclick='calcularCosto(".$operacion->getId().")' class='btn btn-danger btn-sm btn-flat'><span class='glyphicon glyphicon-off'></span>  Finalizar</a></td>
                     </tr>";
             }
             ?>

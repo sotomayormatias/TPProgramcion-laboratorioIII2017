@@ -21,6 +21,7 @@ function validaLogin(){
     })
     .done(function(response){
         if(response["exito"]){
+            window.sessionStorage.setItem("usuario", response['usuario']);
             location.href = "home.php";
         }
         else{
@@ -42,6 +43,7 @@ function desloguear()
         accion: "logout"
 	})
 	.done(function(){
+        window.sessionStorage.removeItem("usuario");
 		location.href = "index.php";
 	});
 }
@@ -299,21 +301,53 @@ function filtrarOperacion(){
     });
 }
 
-function finalizarOperacion($idOperacion, $idUsuario){
+function finalizarOperacion($idOperacion, $costo){
+    $usuario = window.sessionStorage.getItem("usuario");
 
     $.ajax({
         url: $url,
         type: "POST",
         data: {
             idOperacion: $idOperacion,
-            idUsuario: $idUsuario,
+            costo: $costo,
+            usuario: $usuario,
             accion: "finalizarOperacion"
         }
     })
     .done(function(response){
-        $("#operaciones").html(response);
+        $("#principal").html(response);
+        $("#myModal").modal("hide");
     })
     .fail(function(response){
         alert(response.responseText);
     });
 }
+
+function calcularCosto($id){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            idOperacion: $id,
+            accion: "calcularCosto"
+        }
+    })
+    .done(function(response){
+        $res = $.parseJSON(response);
+        $("#myModal .modal-body").html("<p>Se debe abonar: <strong>$"+$res['costo']+"</strong></p>");
+        $("#finalizar").click(function(){finalizarOperacion($res['idOperacion'], $res['costo']);});
+        $("#myModal").modal("show");
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+//Se pasa el id de operacion por parametro para que calcule el costo
+// $('#myModal').on('show.bs.modal', function (event) {
+//   var button = $(event.relatedTarget);
+//   var recipient = button.data('whatever');
+//   var modal = $(this);
+//   modal.find('.modal-body').text('New message to ' + recipient);
+//   modal.find('.modal-body input').val(recipient);
+// })

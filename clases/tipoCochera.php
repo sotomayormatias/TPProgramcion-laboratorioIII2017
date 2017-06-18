@@ -5,6 +5,9 @@ class TipoCochera
 //--ATRIBUTOS
     private $id;
 	private $descripcion;
+    private $precioHora;
+    private $precioMediaEstadia;
+    private $precioEstadia;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -17,19 +20,46 @@ class TipoCochera
 	{
 		return $this->descripcion;
 	}
+	public function GetPrecioHora()
+	{
+		return $this->precioHora;
+	}
+	public function GetPrecioMediaEstadia()
+	{
+		return $this->precioMediaEstadia;
+	}
+	public function GetPrecioEstadia()
+	{
+		return $this->precioEstadia;
+	}
 
 //--SETTERS
 	public function SetDescripcion($valor)
 	{
 		$this->descripcion = $valor;
 	}
+	public function SetPrecioHora($valor)
+	{
+		$this->precioHora = $valor;
+	}
+	public function SetPrecioMediaEstadia($valor)
+	{
+		$this->precioMediaEstadia = $valor;
+	}
+	public function SetPrecioEstadia($valor)
+	{
+		$this->precioEstadia = $valor;
+	}
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($id=NULL, $descripcion=NULL)
+	public function __construct($id=NULL, $descripcion=NULL, $precioHora=NULL, $precioMediaEstadia=NULL, $precioEstadia=NULL)
 	{
         $this->id = $id;
         $this->descripcion = $descripcion;
+        $this->precioHora = $precioHora;
+        $this->precioMediaEstadia = $precioMediaEstadia;
+        $this->precioEstadia = $precioEstadia;
 	}
 
 //--------------------------------------------------------------------------------//
@@ -39,12 +69,17 @@ class TipoCochera
 		$tipos = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idTipo, descripcion FROM tipocochera");
+		$consulta = $objConexion->retornarConsulta("SELECT 	idTipo, 
+															descripcion, 
+															precioHora, 
+															precioMediaEstadia, 
+															precioEstadia 
+													FROM tipocochera");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$tipos[] = new TipoCochera($fila['idTipo'], $fila['descripcion']);
+			$tipos[] = new TipoCochera($fila['idTipo'], $fila['descripcion'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		}
 		
 		return $tipos;
@@ -53,11 +88,17 @@ class TipoCochera
 	public static function TraerTipoPorId($id)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idTipo, descripcion FROM tipocochera WHERE idTipo = ". $id);
+		$consulta = $objConexion->retornarConsulta("SELECT 	idTipo, 
+															descripcion, 
+															precioHora, 
+															precioMediaEstadia, 
+															precioEstadia 
+													FROM tipocochera 
+													WHERE idTipo = ". $id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$tipo = new TipoCochera($fila['idTipo'], $fila['descripcion']);
+		$tipo = new TipoCochera($fila['idTipo'], $fila['descripcion'], $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
 		
 		return $tipo;
 	}

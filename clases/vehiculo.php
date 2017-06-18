@@ -90,6 +90,18 @@ public static function Guardar($obj)
 		return $vehiculos;
 	}
 
+	public static function TraerVehiculoPorId($id)
+	{
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT idVehiculo, patente, marca, color FROM vehiculo WHERE idVehiculo = '". $id ."'");
+		$consulta->execute();
+		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+		$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
+		
+		return $vehiculo;
+	}
+
 	public static function TraerVehiculoPorPatente($patente)
 	{
 		$objConexion = Conexion::getConexion();

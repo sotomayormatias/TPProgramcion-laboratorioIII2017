@@ -93,9 +93,25 @@ switch($accion){
         break;
 
     case "finalizarOperacion":
-        $usuario = isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL;
+        $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : NULL;
         $idOperacion = isset($_POST['idOperacion']) ? $_POST['idOperacion'] : NULL;
-        //TODO: falta llamar al metodo modificar
+        $costo = isset($_POST['costo']) ? $_POST['costo'] : NULL;
+        
+        $operacion = Operacion::TraerOperacionPorId($idOperacion);
+        $operacion->SetEmpleadoEgreso($usuario);
+        $operacion->SetCosto($costo);
+        $operacion->SetEgreso(date("Y-m-d H:i:s"));
+
+        Operacion::Modificar($operacion);
+        $operacion->GetCochera()->CambiarEstado();
+
+        include("modulos/grillaOperaciones.php");
+        break;
+    
+    case "calcularCosto":
+        $idOperacion = isset($_POST['idOperacion']) ? $_POST['idOperacion'] : NULL;
+        $costo = Operacion::calcularCosto($idOperacion);
+        echo json_encode(array('idOperacion'=>$idOperacion, 'costo'=>$costo));
         break;
 
     default:

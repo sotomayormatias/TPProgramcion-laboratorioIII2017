@@ -10,9 +10,6 @@ class Cochera
 	private $estado;
  	private $piso;
     private $idTipo;
-    private $precioHora;
-    private $precioMediaEstadia;
-    private $precioEstadia;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -37,18 +34,6 @@ class Cochera
 	{
 		return $this->idTipo;
 	}
-	public function GetPrecioHora()
-	{
-		return $this->precioHora;
-	}
-	public function GetPrecioMediaEstadia()
-	{
-		return $this->precioMediaEstadia;
-	}
-	public function GetPrecioEstadia()
-	{
-		return $this->precioEstadia;
-	}
 
 //--SETTERS
 	public function SetEstado($valor)
@@ -63,31 +48,16 @@ class Cochera
 	{
 		$this->idTipo = $valor;
 	}
-	public function SetPrecioHora($valor)
-	{
-		$this->precioHora = $valor;
-	}
-	public function SetPrecioMediaEstadia($valor)
-	{
-		$this->precioMediaEstadia = $valor;
-	}
-	public function SetPrecioEstadia($valor)
-	{
-		$this->precioEstadia = $valor;
-	}
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($id=NULL, $numero=NULL, $estado=NULL, $piso=NULL, $tipo=NULL, $precioHora=NULL, $precioMediaEstadia=NULL, $precioEstadia=NULL)
+	public function __construct($id=NULL, $numero=NULL, $estado=NULL, $piso=NULL, $tipo=NULL)
 	{
 		$this->id = $id;
         $this->numero = $numero;
         $this->estado = $estado;
         $this->piso = $piso;
         $this->idTipo = $tipo;
-        $this->precioHora = $precioHora;
-        $this->precioMediaEstadia = $precioMediaEstadia;
-        $this->precioEstadia = $precioEstadia;
 	}
 
 //--------------------------------------------------------------------------------//
@@ -97,58 +67,60 @@ class Cochera
 		$cocheras = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
-															c.numero, 
-															c.idEstado, 
-															ec.descripcion as descEstado, 
-															c.idTipo, 
-															tc.descripcion as descTipo,
-															c.piso, 
-															tc.precioHora, 
-															tc.precioMediaEstadia, 
-															tc.precioEstadia 
-													FROM cochera c
-													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo
-													INNER JOIN estadocochera ec
-													ON ec.idEstado = c.idEstado");
+		$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+															numero, 
+															idEstado,  
+															idTipo, 
+															piso
+													FROM cochera");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
-			$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
-			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo, $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+			$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+			$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
 		}
 		
 		return $cocheras;
 	}
 
-	public static function TraerCocheraPorNro($numero)
+	public static function TraerCocheraPorId($id)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
-															c.numero, 
-															c.idEstado, 
-															ec.descripcion as descEstado, 
-															c.idTipo, 
-															tc.descripcion as descTipo,
-															c.piso, 
-															tc.precioHora, 
-															tc.precioMediaEstadia, 
-															tc.precioEstadia 
-													FROM cochera c
-													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo
-													INNER JOIN estadocochera ec
-													ON ec.idEstado = c.idEstado
-													WHERE c.numero = ". $numero);
+		$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+															numero, 
+															idEstado,  
+															idTipo, 
+															piso
+													FROM cochera
+													WHERE idCochera = ". $id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
-		$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
-		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo,  $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+		$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+		$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
+		
+		return $cochera;
+	}
+
+	public static function TraerCocheraPorNro($numero)
+	{
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+															numero, 
+															idEstado,  
+															idTipo, 
+															piso
+													FROM cochera
+													WHERE numero = ". $numero);
+		$consulta->execute();
+		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
+
+		$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+		$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+		$cochera = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
 		
 		return $cochera;
 	}
@@ -157,30 +129,21 @@ class Cochera
 		$cocheras = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	c.idCochera, 
-															c.numero, 
-															c.idEstado, 
-															ec.descripcion as descEstado, 
-															c.idTipo, 
-															tc.descripcion as descTipo,
-															c.piso, 
-															tc.precioHora, 
-															tc.precioMediaEstadia, 
-															tc.precioEstadia 
-													FROM cochera c
-													INNER JOIN tipocochera tc
-													ON tc.idTipo = c.idTipo
-													INNER JOIN estadocochera ec
-													ON ec.idEstado = c.idEstado
-													WHERE c.idTipo = ". $tipoCochera .
-													" AND c.idEstado = 1");
+		$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+															numero, 
+															idEstado,  
+															idTipo, 
+															piso
+													FROM cochera
+													WHERE idTipo = ". $tipoCochera .
+													" AND idEstado = 1");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$estado = new EstadoCochera($fila['idEstado'], $fila['descEstado']);
-			$tipo = new TipoCochera($fila['idTipo'], $fila['descTipo']);
-			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo, $fila['precioHora'], $fila['precioMediaEstadia'], $fila['precioEstadia']);
+			$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+			$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
 		}
 		
 		return $cocheras;
@@ -212,15 +175,15 @@ class Cochera
 		$resultado = TRUE;
 		
 		$numero = $obj->GetNumero();
-		$idEstado = $obj->GetEstado();
+		$idEstado = $obj->GetEstado()->GetId();
 		$piso = $obj->GetPiso();
-		$idTipo = $obj->GetTipo();
+		$idTipo = $obj->GetTipo()->GetId();
 		$precioHora = $obj->GetPrecioHora();
 		$precioMediaEstadia = $obj->GetPrecioMediaEstadia();
 		$precioEstadia = $obj->GetPrecioEstadia();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso.", precioHora = ".$precioHora.", precioMediaEstadia = ".$precioMediaEstadia.", precioEstadia = ".$precioEstadia." WHERE numero = ".$numero);
+		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso." WHERE numero = ".$numero);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)

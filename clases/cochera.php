@@ -5,11 +5,11 @@ class Cochera
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
-	private $id;
-    private $numero;
-	private $estado;
- 	private $piso;
-    private $idTipo;
+	public $id;
+    public $numero;
+	public $estado;
+ 	public $piso;
+    public $idTipo;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -137,6 +137,29 @@ class Cochera
 													FROM cochera
 													WHERE idTipo = ". $tipoCochera .
 													" AND idEstado = 1");
+		
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+			$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+			$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
+		}
+		
+		return $cocheras;
+	}
+
+	public static function TraerCocherasOcupadas(){
+		$cocheras = array();
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+															numero, 
+															idEstado,  
+															idTipo, 
+															piso
+													FROM cochera
+													WHERE idEstado = 2");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))

@@ -1,5 +1,8 @@
 <?php
+    include_once "./clases/cochera.php";
 
+    $arrayCocheras = Cochera::TraerCocherasOcupadas();
+    $cocherasOcupadas = count($arrayCocheras);
 ?>
 
 
@@ -24,13 +27,13 @@
     <!-- small box -->
     <div class="small-box bg-green">
     <div class="inner">
-        <h3>53<sup style="font-size: 20px">%</sup></h3>
-        <p>Cocheras ocupadas</p>
+        <h3><?php echo $cocherasOcupadas; ?></h3>
+        <p>Cochera<?php if($cocherasOcupadas > 1){echo "s";} ?> ocupada<?php if($cocherasOcupadas > 1){echo "s";} ?></p>
     </div>
     <div class="icon">
-        <i class="ion ion-stats-bars"></i>
+        <i class="ion ion-pie-graph"></i>
     </div>
-    <a href="#" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
+    <a onclick="mostrarCocheras()" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>
 </div><!-- ./col -->
 <div class="col-lg-6 col-xs-6">
@@ -54,7 +57,7 @@
         <p>Unique Visitors</p>
     </div>
     <div class="icon">
-        <i class="ion ion-pie-graph"></i>
+        <i class="ion ion-stats-bars"></i>
     </div>
     <a href="#" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>

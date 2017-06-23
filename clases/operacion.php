@@ -3,14 +3,14 @@ class Operacion
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
-	private $id;
-    private $cochera;
-	private $vehiculo;
- 	private $costo;
-    private $ingreso;
-    private $egreso;
-    private $empleadoIngreso;
-    private $empleadoEgreso;
+	public $id;
+    public $cochera;
+	public $vehiculo;
+ 	public $costo;
+    public $ingreso;
+    public $egreso;
+    public $empleadoIngreso;
+    public $empleadoEgreso;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//

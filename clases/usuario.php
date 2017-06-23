@@ -6,12 +6,12 @@ class Usuario
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
-    private $id;
-	private $nombre;
- 	private $correo;
-    private $password;
-    private $rol;
-    private $turno;
+    public $id;
+	public $nombre;
+ 	public $correo;
+    public $password;
+    public $rol;
+    public $turno;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -104,24 +104,18 @@ class Usuario
 		$usuarios = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT U.idUsuario, 
-															U.nombre, 
-															U.correo, 
-															U.password, 
-															U.idRol, 
-															R.descripcion as descRol,
-															U.idTurno,
-															T.descripcion as descTurno
-													FROM usuario U
-													INNER JOIN rol R
-													ON U.idRol = R.idRol
-													INNER JOIN turno T
-													ON U.idTurno = T.IdTurno");
+		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, 
+															nombre, 
+															correo, 
+															password, 
+															idRol, 
+															idTurno
+													FROM usuario");
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$rol = new Rol($fila['idRol'], $fila['descRol']);
-			$turno = new Turno($fila['idTurno'], $fila['descTurno']);
+			$rol = Rol::TraerRolPorId($fila['idRol']);
+			$turno = Turno::TraerTurnoPorId($fila['idTurno']);
 			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
 		}
 		

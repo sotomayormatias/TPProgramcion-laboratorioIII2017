@@ -3,10 +3,10 @@ class Turno
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
-    private $id;
-	private $descripcion;
-    private $horarioIngreso;
-    private $HorarioSalida;
+    public $id;
+	public $descripcion;
+    public $horarioIngreso;
+    public $HorarioSalida;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -73,7 +73,7 @@ class Turno
 	public static function TraerTurnoPorId($id)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idRol, descripcion, ingreso, egreso FROM turno WHERE idTurno = ". $id);
+		$consulta = $objConexion->retornarConsulta("SELECT idTurno, descripcion, ingreso, egreso FROM turno WHERE idTurno = ". $id);
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 

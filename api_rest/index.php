@@ -10,24 +10,6 @@ require_once '../clases/vehiculo.php';
 require_once '../clases/operacion.php';
 
 $app = new \Slim\App;
-// $app->get('/hello/{name}', function (Request $request, Response $response) {
-//     $name = $request->getAttribute('name');
-//     $response->getBody()->write("Hello, $name");
-
-//     return $response;
-// });
-
-// $app->get('/', function (Request $request, Response $response) {
-//     $response->getBody()->write("Hello Slim Framework GET");
-
-//     return $response;
-// });
-
-// $app->post('/', function (Request $request, Response $response) {
-//     $response->getBody()->write("Hello Slim Framework POST");
-
-//     return $response;
-// });
 
 $app->get('/cochera[/]', function (Request $request, Response $response) {
     $arrayDeCocheras = Cochera::TraerTodos();
@@ -42,6 +24,22 @@ $app->get('/usuario[/]', function (Request $request, Response $response) {
     return $response;
 });
 
+$app->post('/usuario[/]', function (Request $request, Response $response) {
+    $parsedBody = $request->getParsedBody();
+    $nombre = filter_var($parsedBody['nombre'], FILTER_SANITIZE_STRING);
+    $correo = filter_var($parsedBody['correo'], FILTER_SANITIZE_STRING);
+    $password = filter_var($parsedBody['password'], FILTER_SANITIZE_STRING);
+    $rol = filter_var($parsedBody['rol'], FILTER_SANITIZE_STRING);
+    $turno = filter_var($parsedBody['turno'], FILTER_SANITIZE_STRING);
+
+    $usuario = new Usuario(null, $nombre, $correo, $password, $rol, $turno);
+    //no se debe borrar el response, se debe agregarle un json como con el get de usuario
+    Usuario::Guardar($usuario);
+    $response->getBody()->write("se guardo el usuario");
+    // $response = $response->withJson($usuario);
+    return $response;
+});
+
 $app->get('/vehiculo[/]', function (Request $request, Response $response) {
     $arrayDeVehiculos = Vehiculo::TraerTodos();
     $response = $response->withJson($arrayDeVehiculos);
@@ -51,6 +49,23 @@ $app->get('/vehiculo[/]', function (Request $request, Response $response) {
 $app->get('/operacion[/]', function (Request $request, Response $response) {
     $arrayDeOperaciones = Operacion::TraerTodos();
     $response = $response->withJson($arrayDeOperaciones);
+    return $response;
+});
+
+$app->post('/operacion[/]', function (Request $request, Response $response) {
+    $parsedBody = $request->getParsedBody();
+    $cochera = filter_var($parsedBody['cochera'], FILTER_SANITIZE_STRING);
+    $vehiculo = filter_var($parsedBody['vehiculo'], FILTER_SANITIZE_STRING);
+    $costo = filter_var($parsedBody['costo'], FILTER_SANITIZE_STRING);
+    $ingreso = filter_var($parsedBody['ingreso'], FILTER_SANITIZE_STRING);
+    $egreso = filter_var($parsedBody['egreso'], FILTER_SANITIZE_STRING);
+    $empleadoIngreso = filter_var($parsedBody['empleadoIngreso'], FILTER_SANITIZE_STRING);
+    $empleadoEgreso = filter_var($parsedBody['empleadoEgreso'], FILTER_SANITIZE_STRING);
+
+    $usuario = new Operacion(null, $cochera, $vehiculo, $costo, $ingreso, $egreso, $empleadoIngreso, $empleadoEgreso);
+    Usuario::Guardar($usuario);
+    $response->getBody()->write("se guardo la operacion");
+    
     return $response;
 });
 

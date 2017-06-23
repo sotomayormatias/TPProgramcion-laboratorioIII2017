@@ -19,6 +19,7 @@
     <link href="AdminLTE-master/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <link href="AdminLTE-master/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
     <link href="AdminLTE-master/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
+    <link href="AdminLTE-master/plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="css/estilos.css" rel="stylesheet" type="text/css" />
 
     <title>Park Here</title>
@@ -54,7 +55,7 @@
                 <li><a onclick="traerOperaciones()">Finalizar</a></li>
                 <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
                   <li class="divider"></li>
-                  <li><a href="#">Información</a></li>
+                  <li><a onclick="traerEstadisticas()">Información</a></li>
                 <?php } ?>
               </ul>
               </li>
@@ -120,6 +121,8 @@
     <script src="AdminLTE-master/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     <script src="AdminLTE-master/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+    <!-- date-range-picker -->
+    <script src="AdminLTE-master/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
     <script src="js/funciones.js"></script>
   </body>
 </html>

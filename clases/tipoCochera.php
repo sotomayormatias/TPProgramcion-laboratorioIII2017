@@ -3,11 +3,11 @@ class TipoCochera
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
-    private $id;
-	private $descripcion;
-    private $precioHora;
-    private $precioMediaEstadia;
-    private $precioEstadia;
+    public $id;
+	public $descripcion;
+    public $precioHora;
+    public $precioMediaEstadia;
+    public $precioEstadia;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//

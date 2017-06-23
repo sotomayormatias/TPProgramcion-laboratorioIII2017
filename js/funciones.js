@@ -343,6 +343,22 @@ function calcularCosto($id){
     });
 }
 
+function traerEstadisticas(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerEstadisticas"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
 //Se pasa el id de operacion por parametro para que calcule el costo
 // $('#myModal').on('show.bs.modal', function (event) {
 //   var button = $(event.relatedTarget);

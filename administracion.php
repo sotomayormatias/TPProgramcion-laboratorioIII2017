@@ -114,6 +114,10 @@ switch($accion){
         echo json_encode(array('idOperacion'=>$idOperacion, 'costo'=>$costo));
         break;
 
+    case "traerEstadisticas":
+        include("modulos/estadisticas.php");
+        break;
+
     default:
         echo ":(";
 }

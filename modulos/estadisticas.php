@@ -1,21 +1,38 @@
 <?php 
-    $operaciones = Operacion::TraerTodos();
+    $json = Cochera::TraerEstadisticas(NULL, NULL);
+    $estadisticas = json_decode($json);
 ?>
 
-<form method="POST" onsubmit="filtrarOperacion(); return false;" class="form-inline">
+<form method="POST" onsubmit="filtrarEstadisticas(); return false;" class="form-inline">
+    <div class="filtro">
     <div class="form-group">
-        <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" />
+        <label for="fechaDesde">Desde</label>
+        <div class="input-group date" id="fechaDesde" name="fechaDesde">
+            <input type="text" class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
     </div>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Filtrar"/>
+        <label for="fechaHasta">Hasta</label>
+        <div class="input-group date" id="fechaHasta" name="fechaHasta">
+            <input type="text" class="form-control" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-sm btn-flat" value="Filtrar"/>
+    </div>
+    </div>
+    <div class="filtro">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">Empleados</a></li>
+            <li role="presentation"><a href="#">Cocheras</a></li>
+            <li role="presentation"><a href="#">Vehiculos</a></li>
+        </ul>
     </div>
 </form>
 
@@ -24,23 +41,17 @@
         <thead>
             <tr>
                 <th>Cochera</th>
-                <th>Patente</th>
-                <th>Marca</th>
-                <th>Color</th>
-                <th>Ingreso</th>
-                <th></th>
+                <th>Piso</th>
+                <th>Cantidad de Vehiculos</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            foreach ($operaciones as $operacion) {
+            foreach ($estadisticas as $estadistica) {
                 echo "<tr>
-                    <td>".$operacion->getCochera()."</td>
-                    <td>".$operacion->getVehiculo()->getPatente()."</td>
-                    <td>".$operacion->getVehiculo()->getMarca()."</td>
-                    <td>".$operacion->getVehiculo()->getColor()."</td>
-                    <td>".$operacion->getIngreso()."</td>
-                    <td><a onclick='calcularCosto(".$operacion->getId().")' class='btn btn-danger btn-sm btn-flat'><span class='glyphicon glyphicon-off'></span>  Finalizar</a></td>
+                        <td>".$estadistica->numero."</td>
+                        <td>".$estadistica->piso."</td>
+                        <td>".$estadistica->cantVehiculos."</td>
                     </tr>";
             }
             ?>
@@ -50,6 +61,19 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker1').datepicker();
+        $("#fechaDesde").datepicker({
+        autoclose: true
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+            $('#fechaHasta').datepicker('setStartDate', minDate);
+        });
+
+        $("#fechaHasta").datepicker({
+        autoclose: true
+        })
+        .on('changeDate', function (selected) {
+            var maxDate = new Date(selected.date.valueOf());
+            $('#fechaDesde').datepicker('setEndDate', maxDate);
+        });
     });
 </script>

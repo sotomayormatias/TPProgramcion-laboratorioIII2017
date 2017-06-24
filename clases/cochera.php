@@ -216,6 +216,30 @@ class Cochera
 		
 		return $resultado;
 	}
+
+	public static function TraerEstadisticas(){
+		$estadisticas = array();
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("SELECT 	
+														C.idCochera, 
+														C.numero, 
+														C.piso, 
+														COUNT(*) as cantVehiculos
+													FROM cochera C
+													INNER JOIN operaciones O
+													ON C.idCochera = O.idCochera
+													GROUP BY C.idcochera
+													ORDER BY cantVehiculos DESC");
+		
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$estadisticas[] = $fila;
+		}
+		
+		return json_encode($estadisticas);
+	}
 	
 //--------------------------------------------------------------------------------//
 }

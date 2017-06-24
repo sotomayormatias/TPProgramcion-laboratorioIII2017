@@ -161,6 +161,30 @@ class Usuario
 		return $usuario;
 	}
 
+	public static function TraerIngresos($fechaDesde, $fechaHasta){
+		$estadisticas = array();
+
+		$objConexion = Conexion::getConexion();
+		$querySelect = 	"SELECT o.idEmpleadoIngreso, u.nombre, COUNT(*) as ingresos 
+					FROM operaciones o
+					INNER JOIN usuario u
+						ON u.idUsuario = o.idEmpleadoIngreso";
+		$queryWhere = "";
+		if($fechaDesde != NULL && $fechaHasta != NULL){
+			$queryWhere = " WHERE ingreso BETWEEN '".$fechaDesde."' AND '".$fechaHasta."'";
+		}
+		else if($fechaDesde != NULL){
+			$queryWhere = " WHERE ingreso > '".$fechaDesde."'";
+		}
+		else if($fechaHasta != NULL){
+			$queryWhere = " WHERE ingreso < '".$fechaHasta."'";
+		}
+		$queryGroup = " GROUP BY idEmpleadoIngreso";
+		$consulta = $objConexion->retornarConsulta($querySelect.$queryWhere.$queryGroup);
+		// var_dump($consulta);
+		
+	}
+
 	public static function TraerUsuariosPorRol($rol)
 	{
 		$usuarios = array();

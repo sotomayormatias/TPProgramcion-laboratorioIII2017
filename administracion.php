@@ -114,8 +114,40 @@ switch($accion){
         echo json_encode(array('idOperacion'=>$idOperacion, 'costo'=>$costo));
         break;
 
-    case "traerEstadisticas":
-        include("modulos/estadisticas.php");
+    case "traerEstadisticasEmpleado":
+        include("modulos/estadisticasEmpleado.php");
+        break;
+
+    case "traerTransaccionesEmpleado":
+        $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
+        $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
+        echo Usuario::traerTransacciones($fechaDesde, $fechaHasta);
+        break;
+
+    case "traerFichajesEmpleado":
+        $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
+        $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
+        echo Usuario::traerFichajes($fechaDesde, $fechaHasta);
+        break;
+
+    case "traerEstadisticasCochera":
+        include("modulos/estadisticasCochera.php");
+        break;
+
+    case "filtrarEstadisticasCochera":
+        $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
+        $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
+        echo Cochera::TraerEstadisticas($fechaDesde, $fechaHasta);
+        break;
+
+    case "traerEstadisticasVehiculo":
+        include("modulos/estadisticasVehiculo.php");
+        break;
+
+    case "filtrarEstadisticasVehiculo":
+        $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
+        $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
+        echo Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
         break;
 
     default:

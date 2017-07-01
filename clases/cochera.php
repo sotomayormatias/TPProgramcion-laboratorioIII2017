@@ -217,20 +217,27 @@ class Cochera
 		return $resultado;
 	}
 
-	public static function TraerEstadisticas(){
+	public static function TraerEstadisticas($fechaDesde, $fechaHasta){
 		$estadisticas = array();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT 	
-														C.idCochera, 
-														C.numero, 
-														C.piso, 
-														COUNT(*) as cantVehiculos
-													FROM cochera C
-													INNER JOIN operaciones O
-													ON C.idCochera = O.idCochera
-													GROUP BY C.idcochera
-													ORDER BY cantVehiculos DESC");
+		$query = "SELECT 	
+					C.idCochera, 
+					C.numero, 
+					C.piso, 
+					COUNT(*) as cantVehiculos
+				FROM cochera C
+				INNER JOIN operaciones O
+				ON C.idCochera = O.idCochera";
+		
+		if($fechaDesde != NULL and $fechaHasta != NULL){
+			$query .= " WHERE O.ingreso > '".$fechaDesde."' AND O.egreso < '".$fechaHasta."'";
+		}
+
+		$query .= " GROUP BY C.idcochera
+				ORDER BY cantVehiculos DESC";
+
+		$consulta = $objConexion->retornarConsulta($query);
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))

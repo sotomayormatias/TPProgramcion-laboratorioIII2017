@@ -343,12 +343,12 @@ function calcularCosto($id){
     });
 }
 
-function traerEstadisticas(){
+function traerEstadisticasEmpleado(){
     $.ajax({
         url: $url,
         type: "POST",
         data: {
-            accion: "traerEstadisticas"
+            accion: "traerEstadisticasEmpleado"
         }
     })
     .done(function(response){
@@ -359,11 +359,225 @@ function traerEstadisticas(){
     });
 }
 
-//Se pasa el id de operacion por parametro para que calcule el costo
-// $('#myModal').on('show.bs.modal', function (event) {
-//   var button = $(event.relatedTarget);
-//   var recipient = button.data('whatever');
-//   var modal = $(this);
-//   modal.find('.modal-body').text('New message to ' + recipient);
-//   modal.find('.modal-body input').val(recipient);
-// })
+function traerTransacciones(){
+    focusTabs(2);
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerTransaccionesEmpleado"
+        }
+    })
+    .done(function(response){
+        $table = "<table class='table table-hover table-stripped'><thead><tr><th>Empleado</th><th>Transacciones</th></tr></thead><tbody>";
+        $.each($.parseJSON(response), function() {
+            $table += "<tr>";
+            $table += "<td>" + this.nombre + "</td>";
+            $table += "<td>" + this.transacciones + "</td>";
+            $table += "</tr>";
+        });
+        $table += "</tbody></table>";
+
+        $("#estadisticas").html($table);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function traerFichajes(){
+    focusTabs(1);
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerFichajesEmpleado"
+        }
+    })
+    .done(function(response){
+        $table = "<table class='table table-hover table-stripped'><thead><tr><th>Empleado</th><th>Turno</th><th>Horario Ingreso</th></tr></thead><tbody>";
+        $.each($.parseJSON(response), function() {
+            $table += "<tr>";
+            $table += "<td>" + this.nombre + "</td>";
+            $table += "<td>" + this.turno + "</td>";
+            $table += "<td>" + this.fechaLogin + "</td>";
+            $table += "</tr>";
+        });
+        $table += "</tbody></table>";
+
+        $("#estadisticas").html($table);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function filtrarEstadisticasEmpleado(){
+    $fechaDesde = $("#fechaDesde").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+    $fechaHasta = $("#fechaHasta").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+
+    if($("#tabFichajes").hasClass("active")){
+        $.ajax({
+            url: $url,
+            type: "POST",
+            data: {
+                accion: "traerFichajesEmpleado",
+                fechaDesde: $fechaDesde,
+                fechaHasta: $fechaHasta
+            }
+        })
+        .done(function(response){
+            $table = "<table class='table table-hover table-stripped'><thead><tr><th>Empleado</th><th>Turno</th><th>Horario Ingreso</th></tr></thead><tbody>";
+            $.each($.parseJSON(response), function() {
+                $table += "<tr>";
+                $table += "<td>" + this.nombre + "</td>";
+                $table += "<td>" + this.turno + "</td>";
+                $table += "<td>" + this.fechaLogin + "</td>";
+                $table += "</tr>";
+            });
+            $table += "</tbody></table>";
+
+            $("#estadisticas").html($table);
+        })
+        .fail(function(response){
+            alert(response.responseText);
+        });
+    }
+    else {
+        $.ajax({
+            url: $url,
+            type: "POST",
+            data: {
+                accion: "traerTransaccionesEmpleado",
+                fechaDesde: $fechaDesde,
+                fechaHasta: $fechaHasta
+            }
+        })
+        .done(function(response){
+            $table = "<table class='table table-hover table-stripped'><thead><tr><th>Empleado</th><th>Transacciones</th></tr></thead><tbody>";
+            $.each($.parseJSON(response), function() {
+                $table += "<tr>";
+                $table += "<td>" + this.nombre + "</td>";
+                $table += "<td>" + this.transacciones + "</td>";
+                $table += "</tr>";
+            });
+            $table += "</tbody></table>";
+
+            $("#estadisticas").html($table);
+        })
+        .fail(function(response){
+            alert(response.responseText);
+        });
+    }
+}
+
+
+function traerEstadisticasCochera(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerEstadisticasCochera"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function filtrarEstadisticasCochera(){
+    $fechaDesde = $("#fechaDesde").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+    $fechaHasta = $("#fechaHasta").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "filtrarEstadisticasCochera",
+            fechaDesde: $fechaDesde,
+            fechaHasta: $fechaHasta
+        }
+    })
+    .done(function(response){
+        $table = "<table class='table table-hover table-stripped'><thead><tr><th>Cochera</th><th>Piso</th><th>Cantidad de Vehiculos</th></tr></thead><tbody>";
+            $.each($.parseJSON(response), function() {
+                $table += "<tr>";
+                $table += "<td>" + this.numero + "</td>";
+                $table += "<td>" + this.piso + "</td>";
+                $table += "<td>" + this.cantVehiculos + "</td>";
+                $table += "</tr>";
+            });
+            $table += "</tbody></table>";
+
+            $("#estadisticas").html($table);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function traerEstadisticasVehiculo(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerEstadisticasVehiculo"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function filtrarEstadisticasVehiculo(){
+    $fechaDesde = $("#fechaDesde").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+    $fechaHasta = $("#fechaHasta").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "filtrarEstadisticasVehiculo",
+            fechaDesde: $fechaDesde,
+            fechaHasta: $fechaHasta
+        }
+    })
+    .done(function(response){
+        $table = "<table class='table table-hover table-stripped'><thead><tr><th>Patente</th><th>Marca</th><th>Cochera</th><th>Ingreso</th><th>Egreso</th><th>Costo</th></tr></thead><tbody>";
+            $.each($.parseJSON(response), function() {
+                $table += "<tr>";
+                $table += "<td>" + this.patente + "</td>";
+                $table += "<td>" + this.marca + "</td>";
+                $table += "<td>" + this.cochera + "</td>";
+                $table += "<td>" + this.ingreso + "</td>";
+                $table += "<td>" + this.egreso + "</td>";
+                $table += "<td>$" + this.costo + "</td>";
+                $table += "</tr>";
+            });
+            $table += "</tbody></table>";
+
+            $("#estadisticas").html($table);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function focusTabs($index){
+    switch ($index){
+        case 1:
+            $("#tabFichajes").addClass("active");
+            $("#tabTransacciones").removeClass("active");
+            break;
+        case 2:
+            $("#tabFichajes").removeClass("active");
+            $("#tabTransacciones").addClass("active");
+            break;
+    }
+}

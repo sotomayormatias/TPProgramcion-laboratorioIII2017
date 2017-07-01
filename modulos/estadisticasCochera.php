@@ -3,7 +3,7 @@
     $estadisticas = json_decode($json);
 ?>
 
-<form method="POST" onsubmit="filtrarEstadisticas(); return false;" class="form-inline">
+<form method="POST" onsubmit="filtrarEstadisticasCochera(); return false;" class="form-inline">
     <div class="filtro">
     <div class="form-group">
         <label for="fechaDesde">Desde</label>
@@ -27,16 +27,16 @@
         <input type="submit" class="btn btn-primary btn-sm btn-flat" value="Filtrar"/>
     </div>
     </div>
-    <div class="filtro">
+    <!--<div class="filtro">
         <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">Empleados</a></li>
-            <li role="presentation"><a href="#">Cocheras</a></li>
-            <li role="presentation"><a href="#">Vehiculos</a></li>
+            <li role="presentation" class="active" id="tabEmpleados"><a onclick="">Empleados</a></li>
+            <li role="presentation" id="tabCocheras"><a onclick="traerEstadisticasCochera()">Cocheras</a></li>
+            <li role="presentation" id="tabVehiculos"><a onclick="traerEstadisticasVehiculo()">Vehiculos</a></li>
         </ul>
-    </div>
+    </div>-->
 </form>
 
-<div id="operaciones">
+<div id="estadisticas">
     <table class="table table-hover table-stripped" >
         <thead>
             <tr>

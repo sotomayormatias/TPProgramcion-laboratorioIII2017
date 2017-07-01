@@ -275,5 +275,80 @@ class Usuario
 
 		return $resultado;
 	}
+
+	public static function traerFichajes($fechaDesde, $fechaHasta){
+		$fichajes = array();
+
+		$query = "SELECT 	U.nombre,
+							T.descripcion as turno,
+							F.fechaLogin
+					FROM usuario U
+					INNER JOIN fichaje F
+					ON U.idUsuario = F.idUsuario
+					INNER JOIN turno T
+					ON U.idTurno = T.idTurno
+					WHERE U.idRol = 2";
+		
+		if($fechaDesde != NULL and $fechaHasta != NULL){
+			$query .= " AND fechaLogin BETWEEN '".$fechaDesde."' AND '".$fechaHasta."'";
+		}
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta($query);
+		
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$fichajes[] = $fila;
+		}
+		
+		return json_encode($fichajes);
+	}
+
+	public static function traerTransacciones($fechaDesde, $fechaHasta){
+		$transacciones = array();
+
+		$objConexion = Conexion::getConexion();
+
+		$query = "SELECT 	T1.nombre, 
+							SUM(T1.transacciones) AS transacciones 
+					FROM ( 
+						SELECT 	idempleadoingreso AS idEmpleado, 
+								U.nombre, 
+								COUNT(*) AS transacciones 
+						FROM operaciones O 
+						INNER JOIN usuario U 
+							ON O.idEmpleadoIngreso = U.idUsuario";
+
+		if($fechaDesde != NULL){
+			$query .= " WHERE ingreso > '".$fechaDesde."' ";
+		}
+
+		$query .= " GROUP BY idempleadoingreso, nombre 
+				UNION 
+				SELECT idempleadoEgreso AS idEmpleado, 
+				U.nombre, 
+				COUNT(*) AS transacciones 
+				FROM operaciones O 
+				INNER JOIN usuario U 
+				ON O.idEmpleadoEgreso = U.idUsuario";
+
+		if($fechaHasta != NULL){
+			$query .= " WHERE egreso < '".$fechaHasta."' ";
+		}
+
+		$query .= " GROUP BY idempleadoEgreso, nombre ) AS T1 
+				GROUP BY T1.idEmpleado";
+		
+		$consulta = $objConexion->retornarConsulta($query);
+
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$transacciones[] = $fila;
+		}
+		
+		return json_encode($transacciones);
+	}
 //--------------------------------------------------------------------------------//
 }

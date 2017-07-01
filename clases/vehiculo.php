@@ -152,5 +152,38 @@ public static function Guardar($obj)
 
 		return $resultado;
 	}
+
+	public static function TraerEstadisticas($fechaDesde, $fechaHasta){
+		$estadisticas = array();
+
+		$objConexion = Conexion::getConexion();
+
+		$query = "SELECT 	V.patente, 
+							V.marca,
+							C.numero as cochera, 
+							O.ingreso, 
+							O.egreso, 
+							O.costo 
+					FROM operaciones O
+					INNER JOIN vehiculo V
+					ON V.idVehiculo = O.idVehiculo
+					INNER JOIN cochera C
+					ON C.idCochera = O.idCochera
+					WHERE O.egreso IS NOT NULL";
+
+		if($fechaDesde != NULL and $fechaHasta != NULL){
+			$query .= " AND O.ingreso > '".$fechaDesde."' AND O.egreso < '".$fechaHasta."'";
+		}
+
+		$consulta = $objConexion->retornarConsulta($query);
+
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$estadisticas[] = $fila;
+		}
+		
+		return json_encode($estadisticas);
+	}
 //--------------------------------------------------------------------------------//
 }

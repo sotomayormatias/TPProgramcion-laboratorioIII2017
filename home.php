@@ -53,11 +53,17 @@
               <ul class="dropdown-menu" role="menu">
                 <li><a onclick="iniciarOperacion()">Nueva</a></li>
                 <li><a onclick="traerOperaciones()">Finalizar</a></li>
-                <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
-                  <li class="divider"></li>
-                  <li><a onclick="traerEstadisticas()">Información</a></li>
-                <?php } ?>
               </ul>
+              </li>
+              <?php if($usuarioLogueado->getRol()->getId() != 2) { ?>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estadisticas <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a onclick="traerEstadisticasEmpleado()">Empleados</a></li>
+                  <li><a onclick="traerEstadisticasCochera()">Cocheras</a></li>
+                  <li><a onclick="traerEstadisticasVehiculo()">Vehiculos</a></li>
+                </ul>
+              <?php } ?>
               </li>
             </ul>
             <!--<form class="navbar-form navbar-left" role="search">

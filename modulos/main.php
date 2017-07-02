@@ -9,6 +9,7 @@
 <!-- Ionicons 2.0.0 -->
 <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" /> 
 <!-- Small boxes (Stat box) -->
+<h1>Park <b>Here</b></h1>
 <div class="row">
 <div class="col-lg-6 col-xs-6">
     <!-- small box -->

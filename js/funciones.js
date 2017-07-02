@@ -22,6 +22,7 @@ function validaLogin(){
     .done(function(response){
         if(response["exito"]){
             window.sessionStorage.setItem("usuario", response['usuario']);
+            window.localStorage.setItem("token", response['token']);
             location.href = "home.php";
         }
         else{
@@ -136,8 +137,9 @@ function agregarUsuario(){
     });
 }
 
-function editarUsuario(){
+function editarUsuario($id){
     var $usuario = {};
+    $usuario.id = $id;
     $usuario.nombre = $("#nombre").val();
     $usuario.correo = $("#correo").val();
     $usuario.turno = $("#turno").val();
@@ -168,6 +170,42 @@ function BorrarEmpleado($id){
         data: {
             id: $id,
             accion: "borrarEmpleado"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function SuspenderEmpleado($id){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            id: $id,
+            accion: "suspenderEmpleado"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function ActivarEmpleado($id){
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            id: $id,
+            accion: "activarEmpleado"
         }
     })
     .done(function(response){

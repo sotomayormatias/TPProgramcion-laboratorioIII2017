@@ -7,7 +7,7 @@
     $empleado = Usuario::TraerUsuarioPorId($id);
 ?>
 
-<form method="POST" onsubmit="editarUsuario(); return false;">
+<form method="POST" onsubmit="editarUsuario(<?php echo $id; ?>); return false;">
     <div class="form-group">
         <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" value="<?php echo $empleado->getNombre(); ?>" />
     </div>

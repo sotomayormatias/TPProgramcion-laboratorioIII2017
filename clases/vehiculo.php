@@ -54,7 +54,7 @@ class Vehiculo
 
 //--------------------------------------------------------------------------------//
 //--METODOS
-public static function Guardar($obj)
+	public static function Guardar($obj)
 	{
 		$resultado = FALSE;
 		
@@ -74,7 +74,7 @@ public static function Guardar($obj)
 		return $resultado;
 	}
 
-	public static function TraerTodos()
+	public static function TraerTodosLosVehiculos()
 	{
 		$vehiculos = array();
 
@@ -118,12 +118,13 @@ public static function Guardar($obj)
 	{
 		$resultado = TRUE;
 		
+		$id = $obj->GetId();
 		$patente = $obj->GetPatente();
 		$marca = $obj->GetMarca();
 		$color = $obj->GetColor();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE vehiculo SET marca = '".$marca."', color = '".$color."' WHERE patente = '".$patente."'");
+		$consulta = $objConexion->retornarConsulta("UPDATE vehiculo SET patente = '".$patente."', marca = '".$marca."', color = '".$color."' WHERE idVehiculo = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -134,15 +135,15 @@ public static function Guardar($obj)
 		return $resultado;
 	}
 
-	public static function Eliminar($patente)
+	public static function Eliminar($id)
 	{
-		if($patente === NULL)
+		if($id === NULL)
 			return FALSE;
 			
 		$resultado = TRUE;
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("DELETE FROM vehiculo WHERE patente = '".$patente."'");
+		$consulta = $objConexion->retornarConsulta("DELETE FROM vehiculo WHERE idVehiculo = ".$id);
 		$cant = $consulta->execute();
 		
 		if($cant < 1)

@@ -1,6 +1,7 @@
 <?php
     include_once "../clases/usuario.php";
     include_once "../clases/conexion.php";
+    include_once "../clases/autentificadorJWT.php";
     session_start();
 
     $response["exito"] = TRUE;
@@ -19,9 +20,20 @@
         $response["exito"] = FALSE;
         $response["mensaje"] = "El password es incorrecto";
     }
+    else if($usuario->GetEstado() == 2){
+        $response["exito"] = FALSE;
+        $response["mensaje"] = "El usuario se encuentra suspendido";
+    }
     else {
         $_SESSION['usuario'] = $usuario->getId();
         $response['usuario'] = $usuario->getId();
+
+        $datos = array(
+            'nombre' => $usuario->GetNombre(),
+            'correo' => $usuario->GetCorreo()
+        );
+        $response['token'] = AutentificadorJWT::crearToken($datos);
+
         if($recordar == "true") {
 			setcookie("usuario", $usuario->getCorreo(), time() + 3600, "/");
 		}

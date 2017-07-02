@@ -94,7 +94,7 @@ class Operacion
 
 //--------------------------------------------------------------------------------//
 //--METODOS
-	public static function TraerTodos()
+	public static function TraerTodasLasOperaciones()
 	{
 		$operaciones = array();
 
@@ -102,24 +102,20 @@ class Operacion
 		$consulta = $objConexion->retornarConsulta("SELECT 	O.idOperacion, 
 															O.idCochera, 
 															O.idVehiculo, 
-															V.patente,
-															V.marca,
-															V.color,
 															O.costo, 
 															O.ingreso, 
 															O.egreso,
 															O.idEmpleadoIngreso, 
 															O.idEmpleadoEgreso
 													FROM operaciones O
-													INNER JOIN vehiculo V
-													ON O.idVehiculo = V.idVehiculo
 													WHERE O.egreso is NULL");
 		
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
-			$vehiculo = new Vehiculo($fila['idVehiculo'], $fila['patente'], $fila['marca'], $fila['color']);
-			$operaciones[] = new Operacion($fila['idOperacion'], $fila['idCochera'], $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
+			$cochera = Cochera::TraerCocheraPorId($fila['idCochera']);
+			$vehiculo = Vehiculo::TraerVehiculoPorId($fila['idVehiculo']);
+			$operaciones[] = new Operacion($fila['idOperacion'], $cochera, $vehiculo, $fila['costo'], $fila['ingreso'], $fila['egreso'], $fila['idEmpleadoIngreso'], $fila['idEmpleadoEgreso']);
 		}
 		
 		return $operaciones;
@@ -163,6 +159,8 @@ class Operacion
 															O.idEmpleadoIngreso, 
 															O.idEmpleadoEgreso
 													FROM operaciones O
+													INNER JOIN Vehiculo V
+													ON V.idvehiculo = O.idVehiculo
 													WHERE V.patente = '". $patente.
 														"' OR '" .$patente. "' = '' AND O.egreso is NULL");
 		$consulta->execute();
@@ -230,7 +228,8 @@ class Operacion
 		$cochera->CambiarEstado();
 
 		//Agrego la operacion
-		$consulta = $objConexion->retornarConsulta("INSERT INTO operaciones(idCochera, idVehiculo, costo, ingreso, egreso, idEmpleadoIngreso, idEmpleadoEgreso) VALUES(".$cochera->getId().", ".$idVehiculo.", ".$costo.", ".$ingreso.", ".$egreso.", ".$idEmpleadoIngreso.", ".$idEmpleadoEgreso.")");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO operaciones(idCochera, idVehiculo, costo, ingreso, egreso, idEmpleadoIngreso, idEmpleadoEgreso) 
+													VALUES(".$cochera->getId().", ".$idVehiculo.", ".$costo.", ".$ingreso.", ".$egreso.", ".$idEmpleadoIngreso.", ".$idEmpleadoEgreso.")");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -238,6 +237,25 @@ class Operacion
 			$resultado = TRUE;			
 		}
 		
+		return $resultado;
+	}
+
+	public static function Eliminar($id)
+	{
+		if($id === NULL)
+			return FALSE;
+			
+		$resultado = TRUE;
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("DELETE FROM operaciones WHERE idOperacion = ".$id);
+		$cant = $consulta->execute();
+		
+		if($cant < 1)
+		{
+			$resultado = FALSE;
+		}
+
 		return $resultado;
 	}
 

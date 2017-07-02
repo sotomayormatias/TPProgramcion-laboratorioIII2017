@@ -37,7 +37,8 @@ switch($accion){
     case "editarUsuario":
         $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
 
-        $usuario = new Usuario(null, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno);
+        $estado = (Usuario::TraerUsuarioPorId($obj->id))->GetEstado();
+        $usuario = new Usuario($obj->id, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, $estado);
         Usuario::Modificar($usuario);
 
         include("modulos/grillaEmpleados.php");
@@ -46,6 +47,20 @@ switch($accion){
     case "borrarEmpleado":
         $id = isset($_POST['id']) ? $_POST['id'] : NULL;
         Usuario::Eliminar($id);
+        
+        include("modulos/grillaEmpleados.php");
+        break;
+
+    case "suspenderEmpleado":
+        $id = isset($_POST['id']) ? $_POST['id'] : NULL;
+        Usuario::Suspender($id);
+        
+        include("modulos/grillaEmpleados.php");
+        break;
+
+    case "activarEmpleado":
+        $id = isset($_POST['id']) ? $_POST['id'] : NULL;
+        Usuario::Activar($id);
         
         include("modulos/grillaEmpleados.php");
         break;

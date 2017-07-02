@@ -1,5 +1,5 @@
 <?php 
-    $operaciones = Operacion::TraerTodos();
+    $operaciones = Operacion::TraerTodasLasOperaciones();
 ?>
 
 <form method="POST" onsubmit="filtrarOperacion(); return false;" class="form-inline">
@@ -27,7 +27,7 @@
             <?php
             foreach ($operaciones as $operacion) {
                 echo "<tr>
-                    <td>".$operacion->getCochera()."</td>
+                    <td>".$operacion->getCochera()->getNumero()."</td>
                     <td>".$operacion->getVehiculo()->getPatente()."</td>
                     <td>".$operacion->getVehiculo()->getMarca()."</td>
                     <td>".$operacion->getVehiculo()->getColor()."</td>

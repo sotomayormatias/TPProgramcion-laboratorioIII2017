@@ -1,6 +1,6 @@
 <?php 
 include_once "clases/cochera.php";
-$arrayDeCocheras = Cochera::TraerTodos();
+$arrayDeCocheras = Cochera::TraerTodasLasCocheras();
 ?>
 
 <table class="table table-hover table-stripped">

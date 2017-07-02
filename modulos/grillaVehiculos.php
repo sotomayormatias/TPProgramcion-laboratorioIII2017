@@ -1,6 +1,6 @@
 <?php 
 include_once "clases/vehiculo.php";
-$arrayDeVehiculos = Vehiculo::TraerTodos();
+$arrayDeVehiculos = Vehiculo::TraerTodosLosVehiculos();
 
 if(count($arrayDeVehiculos) > 0){
 

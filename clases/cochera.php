@@ -62,7 +62,30 @@ class Cochera
 
 //--------------------------------------------------------------------------------//
 //--METODOS
-	public static function TraerTodos()
+	// public static function TraerTodos()
+	// {
+	// 	$cocheras = array();
+
+	// 	$objConexion = Conexion::getConexion();
+	// 	$consulta = $objConexion->retornarConsulta("SELECT 	idCochera, 
+	// 														numero, 
+	// 														idEstado,  
+	// 														idTipo, 
+	// 														piso
+	// 												FROM cochera");
+		
+	// 	$consulta->execute();
+	// 	while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+	// 	{
+	// 		$estado = EstadoCochera::TraerEstadoPorId($fila['idEstado']);
+	// 		$tipo = TipoCochera::TraerTipoPorId($fila['idTipo']);
+	// 		$cocheras[] = new Cochera($fila['idCochera'], $fila['numero'], $estado, $fila['piso'], $tipo);
+	// 	}
+		
+	// 	return $cocheras;
+	// }
+
+	public static function TraerTodasLasCocheras()
 	{
 		$cocheras = array();
 
@@ -172,6 +195,46 @@ class Cochera
 		return $cocheras;
 	}
 
+	public static function Guardar($obj)
+	{
+		$resultado = FALSE;
+		
+		$numero = $obj->GetNumero();
+		$estado = $obj->GetEstado();
+		$piso = $obj->GetPiso();
+		$tipo = $obj->GetTipo();
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("INSERT INTO cochera(numero, idEstado, idTipo, piso) VALUES(".$numero.", ".$estado.", ".$tipo.", ".$piso.")");
+		$cant = $consulta->execute();
+		
+		if($cant > 0)
+		{
+			$resultado = TRUE;			
+		}
+		
+		return $resultado;
+	}
+
+	public static function Eliminar($id)
+	{
+		if($id === NULL)
+			return FALSE;
+			
+		$resultado = TRUE;
+
+		$objConexion = Conexion::getConexion();
+		$consulta = $objConexion->retornarConsulta("DELETE FROM cochera WHERE idCochera = ".$id);
+		$cant = $consulta->execute();
+		
+		if($cant < 1)
+		{
+			$resultado = FALSE;
+		}
+
+		return $resultado;
+	}
+
 	public function CambiarEstado()
 	{
 		$resultado = TRUE;
@@ -197,16 +260,14 @@ class Cochera
 	{
 		$resultado = TRUE;
 		
+		$id = $obj->GetId();
 		$numero = $obj->GetNumero();
 		$idEstado = $obj->GetEstado()->GetId();
 		$piso = $obj->GetPiso();
 		$idTipo = $obj->GetTipo()->GetId();
-		$precioHora = $obj->GetPrecioHora();
-		$precioMediaEstadia = $obj->GetPrecioMediaEstadia();
-		$precioEstadia = $obj->GetPrecioEstadia();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso." WHERE numero = ".$numero);
+		$consulta = $objConexion->retornarConsulta("UPDATE cochera SET numero = ".$numero.", idEstado = ".$idEstado.", idTipo = ".$idTipo.", piso = ".$piso." WHERE idCochera = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)

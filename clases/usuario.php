@@ -12,6 +12,7 @@ class Usuario
     public $password;
     public $rol;
     public $turno;
+    public $estado;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -40,6 +41,10 @@ class Usuario
 	{
 		return $this->turno;
 	}
+	public function GetEstado()
+	{
+		return $this->estado;
+	}
 
 //--SETTERS
 	public function SetNombre($valor)
@@ -62,10 +67,14 @@ class Usuario
 	{
 		$this->turno = $valor;
 	}
+	public function SetEstado($valor)
+	{
+		$this->estado = $valor;
+	}
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($id=NULL, $nombre=NULL, $correo=NULL, $password=NULL, $rol=NULL, $turno=NULL)
+	public function __construct($id=NULL, $nombre=NULL, $correo=NULL, $password=NULL, $rol=NULL, $turno=NULL, $estado=NULL)
 	{
 		$this->id = $id;
         $this->nombre = $nombre;
@@ -73,6 +82,7 @@ class Usuario
         $this->password = $password;
         $this->rol = $rol;
         $this->turno = $turno;
+        $this->estado = $estado;
 	}
 
 //--------------------------------------------------------------------------------//
@@ -88,7 +98,7 @@ class Usuario
 		$turno = $obj->GetTurno();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, idRol, idTurno) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.")");
+		$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, idRol, idTurno, estado) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.", 1)");
 		$cant = $consulta->execute();
 		
 		if($cant > 0)
@@ -99,7 +109,7 @@ class Usuario
 		return $resultado;
 	}
 
-	public static function TraerTodos()
+	public static function TraerTodosLosUsuarios()
 	{
 		$usuarios = array();
 
@@ -109,14 +119,15 @@ class Usuario
 															correo, 
 															password, 
 															idRol, 
-															idTurno
+															idTurno,
+															estado
 													FROM usuario");
 		$consulta->execute();
 		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
 		{
 			$rol = Rol::TraerRolPorId($fila['idRol']);
 			$turno = Turno::TraerTurnoPorId($fila['idTurno']);
-			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno, $fila['estado']);
 		}
 		
 		return $usuarios;
@@ -132,7 +143,8 @@ class Usuario
 															U.idRol, 
 															R.descripcion as descRol,
 															U.idTurno,
-															T.descripcion as descTurno
+															T.descripcion as descTurno,
+															U.estado
 													FROM usuario U
 													INNER JOIN rol R
 													ON U.idRol = R.idRol
@@ -144,7 +156,7 @@ class Usuario
 
 		$rol = new Rol($fila['idRol'], $fila['descRol']);
 		$turno = new Turno($fila['idTurno'], $fila['descTurno']);
-		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno, $fila['estado']);
 		
 		return $usuario;
 	}
@@ -152,38 +164,46 @@ class Usuario
 	public static function TraerUsuarioPorCorreo($correo)
 	{
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("SELECT idUsuario, nombre, correo, password, idRol, idTurno FROM usuario WHERE correo = '".$correo."'");
+		$consulta = $objConexion->retornarConsulta("SELECT 	idUsuario, 
+															nombre, 
+															correo, 
+															password, 
+															idRol, 
+															idTurno,
+															estado 
+															FROM usuario 
+															WHERE correo = '".$correo."'");
 		$consulta->execute();
 		$fila = $consulta->fetch(PDO::FETCH_ASSOC);
 
-		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno']);
+		$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $fila['idRol'], $fila['idTurno'], $fila['estado']);
 		
 		return $usuario;
 	}
 
-	public static function TraerIngresos($fechaDesde, $fechaHasta){
-		$estadisticas = array();
+	// public static function TraerIngresos($fechaDesde, $fechaHasta){
+	// 	$estadisticas = array();
 
-		$objConexion = Conexion::getConexion();
-		$querySelect = 	"SELECT o.idEmpleadoIngreso, u.nombre, COUNT(*) as ingresos 
-					FROM operaciones o
-					INNER JOIN usuario u
-						ON u.idUsuario = o.idEmpleadoIngreso";
-		$queryWhere = "";
-		if($fechaDesde != NULL && $fechaHasta != NULL){
-			$queryWhere = " WHERE ingreso BETWEEN '".$fechaDesde."' AND '".$fechaHasta."'";
-		}
-		else if($fechaDesde != NULL){
-			$queryWhere = " WHERE ingreso > '".$fechaDesde."'";
-		}
-		else if($fechaHasta != NULL){
-			$queryWhere = " WHERE ingreso < '".$fechaHasta."'";
-		}
-		$queryGroup = " GROUP BY idEmpleadoIngreso";
-		$consulta = $objConexion->retornarConsulta($querySelect.$queryWhere.$queryGroup);
-		// var_dump($consulta);
+	// 	$objConexion = Conexion::getConexion();
+	// 	$querySelect = 	"SELECT o.idEmpleadoIngreso, u.nombre, COUNT(*) as ingresos 
+	// 				FROM operaciones o
+	// 				INNER JOIN usuario u
+	// 					ON u.idUsuario = o.idEmpleadoIngreso";
+	// 	$queryWhere = "";
+	// 	if($fechaDesde != NULL && $fechaHasta != NULL){
+	// 		$queryWhere = " WHERE ingreso BETWEEN '".$fechaDesde."' AND '".$fechaHasta."'";
+	// 	}
+	// 	else if($fechaDesde != NULL){
+	// 		$queryWhere = " WHERE ingreso > '".$fechaDesde."'";
+	// 	}
+	// 	else if($fechaHasta != NULL){
+	// 		$queryWhere = " WHERE ingreso < '".$fechaHasta."'";
+	// 	}
+	// 	$queryGroup = " GROUP BY idEmpleadoIngreso";
+	// 	$consulta = $objConexion->retornarConsulta($querySelect.$queryWhere.$queryGroup);
+	// 	// var_dump($consulta);
 		
-	}
+	// }
 
 	public static function TraerUsuariosPorRol($rol)
 	{
@@ -197,7 +217,8 @@ class Usuario
 															U.idRol, 
 															R.descripcion as descRol,
 															U.idTurno,
-															T.descripcion as descTurno
+															T.descripcion as descTurno,
+															U.estado
 													FROM usuario U
 													INNER JOIN rol R
 													ON U.idRol = R.idRol
@@ -209,7 +230,7 @@ class Usuario
 		{
 			$rol = new Rol($fila['idRol'], $fila['descRol']);
 			$turno = new Turno($fila['idTurno'], $fila['descTurno']);
-			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno);
+			$usuarios[] = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno, $fila['estado']);
 		}
 		
 		return $usuarios;
@@ -225,9 +246,10 @@ class Usuario
 		$password = $obj->GetPassword();
 		$rol = $obj->GetRol();
 		$turno = $obj->GetTurno();
+		$estado = $obj->GetEstado();
 
 		$objConexion = Conexion::getConexion();
-		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = ".$rol.", idTurno = ".$turno." WHERE idUsuario = ".$id);
+		$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = ".$rol.", idTurno = ".$turno.", estado = ".$estado." WHERE idUsuario = ".$id);
 		$cant = $consulta->execute();
 			
 		if($cant < 1)
@@ -255,6 +277,36 @@ class Usuario
 		}
 
 		return $resultado;
+	}
+
+	public static function Suspender($id)
+	{
+		if($id === NULL)
+			return FALSE;
+			
+		$resultado = TRUE;
+
+		$usuario = Usuario::TraerUsuarioPorId($id);
+		$usuario->SetRol($usuario->GetRol()->getId());
+		$usuario->SetTurno($usuario->GetTurno()->getId());
+		$usuario->SetEstado(2);
+		
+		return Usuario::Modificar($usuario);
+	}
+
+	public static function Activar($id)
+	{
+		if($id === NULL)
+			return FALSE;
+			
+		$resultado = TRUE;
+
+		$usuario = Usuario::TraerUsuarioPorId($id);
+		$usuario->SetRol($usuario->GetRol()->getId());
+		$usuario->SetTurno($usuario->GetTurno()->getId());
+		$usuario->SetEstado(1);
+		
+		return Usuario::Modificar($usuario);
 	}
 
 	public function FicharIngreso(){

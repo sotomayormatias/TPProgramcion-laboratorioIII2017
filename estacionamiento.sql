@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-06-2017 a las 01:17:38
+-- Tiempo de generación: 03-07-2017 a las 01:31:00
 -- Versión del servidor: 10.1.13-MariaDB
 -- Versión de PHP: 7.0.6
 
@@ -40,13 +40,13 @@ CREATE TABLE `cochera` (
 
 INSERT INTO `cochera` (`idCochera`, `numero`, `idEstado`, `idTipo`, `piso`) VALUES
 (1, 1, 1, 2, 1),
-(2, 2, 2, 2, 1),
+(2, 2, 1, 2, 1),
 (3, 3, 1, 2, 1),
-(4, 4, 1, 1, 1),
-(5, 5, 1, 1, 2),
+(4, 4, 2, 1, 1),
+(5, 5, 2, 1, 2),
 (6, 6, 1, 1, 2),
-(7, 7, 1, 1, 2),
-(8, 8, 2, 1, 2),
+(7, 7, 2, 1, 2),
+(8, 8, 1, 1, 2),
 (9, 9, 1, 1, 3),
 (10, 10, 1, 1, 3),
 (11, 11, 1, 1, 3),
@@ -107,7 +107,27 @@ INSERT INTO `fichaje` (`idFichaje`, `idUsuario`, `fechaLogin`) VALUES
 (17, 8, '2017-06-17 15:19:27'),
 (18, 2, '2017-06-17 23:47:19'),
 (19, 7, '2017-06-18 00:39:19'),
-(20, 7, '2017-06-19 19:51:40');
+(20, 7, '2017-06-19 19:51:40'),
+(21, 7, '2017-06-23 20:24:32'),
+(22, 8, '2017-06-24 14:47:58'),
+(23, 9, '2017-06-24 14:49:11'),
+(24, 8, '2017-06-24 14:50:36'),
+(25, 7, '2017-06-24 15:02:05'),
+(26, 7, '2017-07-01 11:10:04'),
+(27, 7, '2017-07-01 15:02:35'),
+(28, 7, '2017-07-01 15:20:08'),
+(29, 7, '2017-07-01 15:28:13'),
+(30, 7, '2017-07-01 18:21:37'),
+(31, 8, '2017-07-01 21:51:54'),
+(32, 7, '2017-07-01 21:52:10'),
+(33, 2, '2017-07-01 21:52:20'),
+(34, 7, '2017-07-02 13:01:52'),
+(35, 7, '2017-07-02 14:32:22'),
+(36, 7, '2017-07-02 19:47:17'),
+(37, 7, '2017-07-02 19:48:18'),
+(38, 2, '2017-07-02 20:16:33'),
+(39, 2, '2017-07-02 20:20:22'),
+(40, 2, '2017-07-02 20:20:29');
 
 -- --------------------------------------------------------
 
@@ -131,10 +151,19 @@ CREATE TABLE `operaciones` (
 --
 
 INSERT INTO `operaciones` (`idOperacion`, `idCochera`, `idVehiculo`, `costo`, `ingreso`, `egreso`, `idEmpleadoIngreso`, `idEmpleadoEgreso`) VALUES
-(3, 2, '17', 0, '2017-06-08 00:46:43', NULL, 1, NULL),
+(3, 2, '17', 2890, '2017-06-08 00:46:43', '2017-06-24 19:48:07', 1, 8),
 (4, 6, '18', 850, '2017-06-12 23:34:53', '2017-06-17 20:11:10', 2, 2),
 (5, 11, '19', 10, '2017-06-17 15:14:53', '2017-06-17 20:19:32', 2, 8),
-(6, 8, '20', 0, '2017-06-18 00:28:35', NULL, 2, NULL);
+(6, 8, '20', 1190, '2017-06-18 00:28:35', '2017-06-24 19:51:18', 2, 8),
+(7, 7, '21', 10, '2017-06-24 14:48:27', '2017-06-24 19:49:16', 8, 9),
+(8, 12, '22', 10, '2017-06-24 14:48:44', '2017-06-24 19:49:18', 8, 9),
+(9, 9, '23', 10, '2017-06-24 14:49:02', '2017-06-24 19:49:21', 8, 9),
+(10, 11, '24', 10, '2017-06-24 14:49:32', '2017-06-24 19:51:12', 9, 8),
+(11, 7, '25', 0, '2017-06-24 14:49:55', NULL, 9, NULL),
+(12, 5, '26', 0, '2017-06-24 14:50:26', NULL, 9, NULL),
+(13, 12, '27', 1450, '2017-06-24 14:51:06', '2017-07-03 01:07:47', 8, 7),
+(14, 3, '28', 1450, '2017-06-24 14:51:38', '2017-07-03 01:15:28', 8, 7),
+(16, 4, '34', 0, '2017-07-02 20:07:25', NULL, 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -213,20 +242,21 @@ CREATE TABLE `usuario` (
   `correo` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL,
   `idRol` int(11) NOT NULL,
-  `idTurno` int(11) NOT NULL
+  `idTurno` int(11) NOT NULL,
+  `estado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `nombre`, `correo`, `password`, `idRol`, `idTurno`) VALUES
-(1, 'Administrador', 'admin@parkhere.com', 'Admin123', 3, 4),
-(2, 'Empleado mañana', 'turnomaniana@parkhere.com', 'Empleado123', 2, 1),
-(7, 'el patron', 'elpatron@parkhere.com', 'elPatron123', 1, 4),
-(8, 'Empleado tarde', 'turnotarde@parkhere.com', 'Empleado123', 2, 2),
-(9, 'Empleado noche', 'turnonoche@parkhere.com', 'Empleado123', 2, 3),
-(10, 'alberto', 'alberto@cormillot.com', 'cuestiondepeso', 1, 2);
+INSERT INTO `usuario` (`idUsuario`, `nombre`, `correo`, `password`, `idRol`, `idTurno`, `estado`) VALUES
+(1, 'Administrador', 'admin@parkhere.com', 'Admin123', 3, 4, 1),
+(2, 'Empleado mañana', 'turnomaniana@parkhere.com', 'Empleado123', 2, 1, 1),
+(7, 'el patron', 'elpatron@parkhere.com', 'elPatron123', 1, 4, 1),
+(8, 'Empleado tarde', 'turnotarde@parkhere.com', 'Empleado123', 2, 2, 1),
+(9, 'Empleado noche', 'turnonoche@parkhere.com', 'Empleado123', 2, 3, 1),
+(10, 'alberto', 'alberto@cormillot.com', 'cuestiondepeso', 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -249,7 +279,17 @@ INSERT INTO `vehiculo` (`idVehiculo`, `patente`, `marca`, `color`) VALUES
 (17, 'XYZ987', 'VW', 'gris'),
 (18, 'bnt973', 'chevrolet', 'ambar'),
 (19, 'JFH857', 'Ford', 'Verde'),
-(20, 'AFJ123', 'Scania', 'Blanco');
+(20, 'AFJ123', 'Scania', 'Blanco'),
+(21, 'iuo345', 'chevrolet', 'rojo'),
+(22, 'ewrwer', 'werwer', '23423'),
+(23, 'ipoio', 'vw', 'azul'),
+(24, 'nueva', 'nose', 'feo'),
+(25, 'pepito', 'rara', 'bonito'),
+(26, 'yanose', 'trucha', 'transparente'),
+(27, 'apaga', 'honda', 'verde'),
+(28, 'fafafa', 'fofofo', 'fefefe'),
+(31, 'ATR987', 'Au', 'gris'),
+(34, 'ASD456', 'Ford', 'Verde');
 
 --
 -- Índices para tablas volcadas
@@ -317,7 +357,7 @@ ALTER TABLE `vehiculo`
 -- AUTO_INCREMENT de la tabla `cochera`
 --
 ALTER TABLE `cochera`
-  MODIFY `idCochera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idCochera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `estadocochera`
 --
@@ -327,12 +367,12 @@ ALTER TABLE `estadocochera`
 -- AUTO_INCREMENT de la tabla `fichaje`
 --
 ALTER TABLE `fichaje`
-  MODIFY `idFichaje` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idFichaje` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT de la tabla `operaciones`
 --
 ALTER TABLE `operaciones`
-  MODIFY `idOperacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idOperacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
@@ -352,12 +392,12 @@ ALTER TABLE `turno`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `vehiculo`
 --
 ALTER TABLE `vehiculo`
-  MODIFY `idVehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idVehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

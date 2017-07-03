@@ -37,8 +37,8 @@ switch($accion){
     case "editarUsuario":
         $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
 
-        $estado = (Usuario::TraerUsuarioPorId($obj->id))->GetEstado();
-        $usuario = new Usuario($obj->id, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, $estado);
+        $usuarioConEstado = Usuario::TraerUsuarioPorId($obj->id);
+        $usuario = new Usuario($obj->id, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, $usuarioConEstado->GetEstado());
         Usuario::Modificar($usuario);
 
         include("modulos/grillaEmpleados.php");

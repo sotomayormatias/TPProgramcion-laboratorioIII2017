@@ -159,7 +159,7 @@ class Operacion
 															O.idEmpleadoIngreso, 
 															O.idEmpleadoEgreso
 													FROM operaciones O
-													INNER JOIN Vehiculo V
+													INNER JOIN vehiculo V
 													ON V.idvehiculo = O.idVehiculo
 													WHERE V.patente = '". $patente.
 														"' OR '" .$patente. "' = '' AND O.egreso is NULL");

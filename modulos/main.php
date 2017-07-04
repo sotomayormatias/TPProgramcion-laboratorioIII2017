@@ -1,8 +1,12 @@
 <?php
     include_once "./clases/cochera.php";
+    include_once "./clases/operacion.php";
 
     $arrayCocheras = Cochera::TraerCocherasOcupadas();
     $cocherasOcupadas = count($arrayCocheras);
+    $arrayTransacciones = Operacion::traerTransacciones(date("Y-m-d 00:00:00"), date("Y-m-d 00:00:00", strtotime("+1 day")));
+    $cantTransacciones = count($arrayTransacciones);
+
 ?>
 
 
@@ -15,13 +19,13 @@
     <!-- small box -->
     <div class="small-box bg-aqua">
     <div class="inner">
-        <h3>150</h3>
-        <p>Transacciones</p>
+        <h3><?php echo $cantTransacciones; ?></h3>
+        <p>Transacci<?php if($cantTransacciones > 1) echo "ones"; else echo "ón"; ?></p>
     </div>
     <div class="icon">
         <i class="ion ion-android-car"></i>
     </div>
-    <a href="#" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
+    <a onclick="traerOperaciones()" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>
 </div><!-- ./col -->
 <div class="col-lg-6 col-xs-6">
@@ -37,21 +41,20 @@
     <a onclick="mostrarCocheras()" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>
 </div><!-- ./col -->
-<div class="col-lg-6 col-xs-6">
+<div class="col-lg-8 col-lg-offset-2 col-xs-8 col-xs-offset-2">
     <!-- small box -->
     <div class="small-box bg-yellow">
     <div class="inner">
-        <h3>44</h3>
-        <p>User Registrations</p>
+        <h3><?php echo "$".array_sum(array_column($arrayTransacciones, 'costo')); ?></h3>
+        <p>Caja</p>
     </div>
     <div class="icon">
-        <i class="ion ion-person-add"></i>
+        <i class="ion ion-cash"></i>
     </div>
-    <a href="#" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
+    <a onclick="traerEstadisticasVehiculo()" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>
 </div><!-- ./col -->
-<div class="col-lg-6 col-xs-6">
-    <!-- small box -->
+<!--<div class="col-lg-6 col-xs-6">
     <div class="small-box bg-red">
     <div class="inner">
         <h3>65</h3>
@@ -62,5 +65,5 @@
     </div>
     <a href="#" class="small-box-footer">Detalles <i class="fa fa-arrow-circle-right"></i></a>
     </div>
-</div><!-- ./col -->
+</div>-->
 </div><!-- /.row -->

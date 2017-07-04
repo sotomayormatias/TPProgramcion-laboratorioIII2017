@@ -5,15 +5,15 @@
     $turnos = Turno::TraerTodos();
 ?>
 
-<form method="POST" onsubmit="agregarUsuario(); return false;">
+<form method="POST" onsubmit="agregarUsuario(); return false;" data-toggle="validator">
     <div class="form-group">
-        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" />
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" required/>
     </div>
     <div class="form-group">
-        <input type="text" name="correo" id="correo" placeholder="Correo" class="form-control" />
+        <input type="email" name="correo" id="correo" placeholder="Correo" class="form-control" required/>
     </div>
     <div class="form-group" >
-        <select name="turno" id="turno" class="form-control">
+        <select name="turno" id="turno" class="form-control" required>
         <?php 
         foreach($turnos as $turno){
         ?>
@@ -24,9 +24,10 @@
         </select>
     </div>
     <div class="form-group">
-        <input type="text" name="password" id="password" placeholder="Password" class="form-control" />
+        <input type="text" name="password" id="password" placeholder="Password" class="form-control" required/>
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Agregar"/>
     </div>
+    <div class="help-block with-errors"></div>
 </form>

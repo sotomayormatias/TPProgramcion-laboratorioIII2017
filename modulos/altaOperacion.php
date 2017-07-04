@@ -4,15 +4,17 @@
     session_start();
 ?>
 
-<form method="POST" onsubmit="agregarOperacion(<?php echo $_SESSION['usuario']; ?>); return false;">
+<h1>Ingresar Vehículo</h1>
+
+<form method="POST" onsubmit="agregarOperacion(<?php echo $_SESSION['usuario']; ?>); return false;" data-toggle="validator">
     <div class="form-group">
-        <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" />
+        <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" data-minlength="6" required pattern="^[a-zA-Z]{2,3}[0-9]{3}([a-zA-Z]{2})?$"/>
     </div>
     <div class="form-group">
-        <input type="text" name="marca" id="marca" placeholder="Marca" class="form-control" />
+        <input type="text" name="marca" id="marca" placeholder="Marca" class="form-control" required/>
     </div>
     <div class="form-group">
-        <input type="text" name="color" id="color" placeholder="Color" class="form-control" />
+        <input type="text" name="color" id="color" placeholder="Color" class="form-control" required/>
     </div>
     <div class="row">
         <div class="col-xs-3">    

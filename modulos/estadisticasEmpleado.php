@@ -3,29 +3,30 @@
     $fichajes = json_decode($json);
 ?>
 
+<h1>Estadísticas de Empleados</h1>
 <form method="POST" onsubmit="filtrarEstadisticasEmpleado(); return false;" class="form-inline">
     <div class="filtro">
-    <div class="form-group">
-        <label for="fechaDesde">Desde</label>
-        <div class="input-group date" id="fechaDesde" name="fechaDesde">
-            <input type="text" class="form-control" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+        <div class="form-group">
+            <label for="fechaDesde">Desde</label>
+            <div class="input-group date" id="fechaDesde" name="fechaDesde">
+                <input type="text" class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="fechaHasta">Hasta</label>
-        <div class="input-group date" id="fechaHasta" name="fechaHasta">
-            <input type="text" class="form-control" />
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+        <div class="form-group">
+            <label for="fechaHasta">Hasta</label>
+            <div class="input-group date" id="fechaHasta" name="fechaHasta">
+                <input type="text" class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-sm btn-flat" value="Filtrar"/>
-    </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-sm btn-flat" value="Filtrar"/>
+        </div>
     </div>
     <div class="filtro">
         <ul class="nav nav-tabs">

@@ -2,12 +2,15 @@
     $operaciones = Operacion::TraerTodasLasOperaciones();
 ?>
 
-<form method="POST" onsubmit="filtrarOperacion(); return false;" class="form-inline">
-    <div class="form-group">
-        <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" />
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Filtrar"/>
+<h1>Transacciones Pendientes</h1>
+<form method="POST" onsubmit="filtrarOperacion(); return false;" class="form-inline" data-toggle="validator">
+    <div class="filtro">
+        <div class="form-group">
+            <input type="text" name="patente" id="patente" placeholder="Patente" class="form-control" minlength="6" required pattern="^[a-zA-Z]{2,3}[0-9]{3}([a-zA-Z]{2})?$"/>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Filtrar"/>
+        </div>
     </div>
 </form>
 

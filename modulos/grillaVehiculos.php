@@ -1,9 +1,11 @@
 <?php 
 include_once "clases/vehiculo.php";
 $arrayDeVehiculos = Vehiculo::TraerTodosLosVehiculos();
+?>
 
+<h1>Vehículos</h1>
+<?php
 if(count($arrayDeVehiculos) > 0){
-
 ?>
 
 <table class="table table-hover table-stripped">

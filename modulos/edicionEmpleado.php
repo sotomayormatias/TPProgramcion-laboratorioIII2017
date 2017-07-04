@@ -7,15 +7,15 @@
     $empleado = Usuario::TraerUsuarioPorId($id);
 ?>
 
-<form method="POST" onsubmit="editarUsuario(<?php echo $id; ?>); return false;">
+<form method="POST" onsubmit="editarUsuario(<?php echo $id; ?>); return false;" data-toggle="validator">
     <div class="form-group">
-        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" value="<?php echo $empleado->getNombre(); ?>" />
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" value="<?php echo $empleado->getNombre(); ?>" required/>
     </div>
     <div class="form-group">
-        <input type="text" name="correo" id="correo" placeholder="Correo" class="form-control" value="<?php echo $empleado->getCorreo(); ?>" />
+        <input type="email" name="correo" id="correo" placeholder="Correo" class="form-control" value="<?php echo $empleado->getCorreo(); ?>" required/>
     </div>
     <div class="form-group" >
-        <select name="turno" id="turno" class="form-control">
+        <select name="turno" id="turno" class="form-control" required>
         <?php 
         foreach($turnos as $turno){
         ?>
@@ -26,7 +26,7 @@
         </select>
     </div>
     <div class="form-group">
-        <input type="text" name="password" id="password" placeholder="Password" class="form-control" value="<?php echo $empleado->getPassword(); ?>" />
+        <input type="text" name="password" id="password" placeholder="Password" class="form-control" value="<?php echo $empleado->getPassword(); ?>" required/>
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary btn-block" value="Guardar"/>

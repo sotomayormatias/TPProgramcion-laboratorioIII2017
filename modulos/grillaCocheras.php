@@ -3,6 +3,7 @@ include_once "clases/cochera.php";
 $arrayDeCocheras = Cochera::TraerTodasLasCocheras();
 ?>
 
+<h1>Cocheras</h1>
 <table class="table table-hover table-stripped">
     <thead>
         <tr>

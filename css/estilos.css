@@ -9,11 +9,12 @@
 }
 
 #principal{
-    padding-top: 80px;
+    padding-top: 50px;
 }
 
 #principal h1{
     text-align: center;
+    padding-bottom: 20px;
 }
 
 table{
@@ -26,4 +27,5 @@ table thead th{
 
 .filtro{
     padding-bottom: 20px;
+    text-align: center;
 }

@@ -3,6 +3,7 @@
 $arrayDeEmpleados = Usuario::TraerUsuariosPorRol(2);
 ?>
 
+<h1>Empleados</h1>
 <table class="table table-hover table-stripped">
     <thead>
         <tr>

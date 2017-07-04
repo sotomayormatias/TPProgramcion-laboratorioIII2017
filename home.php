@@ -4,6 +4,7 @@
 
   session_start();
   $userId = $_SESSION['usuario'];
+  $login = $_SESSION['login'];
   $usuarioLogueado = Usuario::TraerUsuarioPorId($userId);
 ?>
 
@@ -49,7 +50,7 @@
               <li><a onclick="mostrarVehiculos()">Vehiculos</a></li>
               <li><a onclick="mostrarCocheras()">Cocheras</a></li>
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operaciones <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Transacciones <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a onclick="iniciarOperacion()">Nueva</a></li>
                 <li><a onclick="traerOperaciones()">Finalizar</a></li>
@@ -84,7 +85,7 @@
                   <img src="img/loginImage.jpg" class="img-circle" alt="User Image" />
                   <p>
                     <?php echo $usuarioLogueado->getNombre(). " - Turno " . $usuarioLogueado->getTurno()->getDescripcion(); ?>
-                    <small>Member since Nov. 2012</small>
+                    <small>Logueado desde <?php echo $login; ?></small>
                   </p>
                   </li>
                   <!-- Menu Footer-->

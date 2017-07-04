@@ -26,6 +26,8 @@
     }
     else {
         $_SESSION['usuario'] = $usuario->getId();
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $_SESSION['login'] = date("H:i:s");
         $response['usuario'] = $usuario->getId();
 
         $datos = array(

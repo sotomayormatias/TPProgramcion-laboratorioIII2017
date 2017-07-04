@@ -286,6 +286,36 @@ class Operacion
 		}
 		return $costo;
 	}
+
+	public static function traerTransacciones($fechaDesde, $fechaHasta){
+		$operaciones = array();
+		$objConexion = Conexion::getConexion();
+
+		$query = "SELECT 	idOperacion, costo
+					FROM operaciones";
+
+		if($fechaDesde != NULL && $fechaHasta != NULL){
+			$query .= " WHERE ingreso between '".$fechaDesde."' AND '".$fechaHasta."'";
+		};
+						
+		$query .= " UNION 
+					SELECT idOperacion, costo
+						FROM operaciones";
+		
+		if($fechaDesde != NULL && $fechaHasta != NULL){
+			$query .= " WHERE egreso between '".$fechaDesde."' AND '".$fechaHasta."'";
+		};
+
+		$consulta = $objConexion->retornarConsulta($query);
+
+		$consulta->execute();
+		while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+		{
+			$operaciones[] = new Operacion($fila['idOperacion'], NULL, NULL, $fila['costo'], NULL, NULL, NULL, NULL);
+		}
+		
+		return $operaciones;
+	}
 	
 //--------------------------------------------------------------------------------//
 }

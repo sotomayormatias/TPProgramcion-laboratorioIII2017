@@ -28,7 +28,7 @@ $app->group('/usuario', function () {
   $this->post('[/]', \UsuarioApi::class . ':CargarUno');
   $this->delete('/{id}', \UsuarioApi::class . ':BorrarUno');
   $this->put('[/]', \UsuarioApi::class . ':ModificarUno');
-});
+})->add(\MWParaAutenticar::class . ':VerificarUsuario');
 
 $app->group('/operacion', function () {
   $this->get('[/]', \OperacionApi::class . ':traerTodos');
@@ -36,7 +36,7 @@ $app->group('/operacion', function () {
   $this->post('[/]', \OperacionApi::class . ':CargarUno');
   $this->delete('/{id}', \OperacionApi::class . ':BorrarUno');
   $this->put('[/]', \OperacionApi::class . ':ModificarUno');
-});
+})->add(\MWParaAutenticar::class . ':VerificarUsuario');
 
 $app->group('/vehiculo', function () {
   $this->get('[/]', \VehiculoApi::class . ':traerTodos');

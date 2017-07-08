@@ -63,6 +63,7 @@
                   <li><a onclick="traerEstadisticasEmpleado()">Empleados</a></li>
                   <li><a onclick="traerEstadisticasCochera()">Cocheras</a></li>
                   <li><a onclick="traerEstadisticasVehiculo()">Vehiculos</a></li>
+                  <li><a onclick="traerEstadisticasCaja()">Caja</a></li>
                 </ul>
               <?php } ?>
               </li>

@@ -2,6 +2,7 @@
     include_once "./clases/cochera.php";
     include_once "./clases/operacion.php";
 
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
     $arrayCocheras = Cochera::TraerCocherasOcupadas();
     $cocherasOcupadas = count($arrayCocheras);
     $arrayTransacciones = Operacion::traerTransacciones(date("Y-m-d 00:00:00"), date("Y-m-d 00:00:00", strtotime("+1 day")));

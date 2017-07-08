@@ -509,6 +509,51 @@ function filtrarEstadisticasEmpleado(){
     }
 }
 
+function traerEstadisticasCaja(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "traerEstadisticasCaja"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
+
+function filtrarEstadisticasCaja(){
+    $fechaDesde = $("#fechaDesde").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+    $fechaHasta = $("#fechaHasta").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');
+
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "filtrarEstadisticasCaja",
+            fechaDesde: $fechaDesde,
+            fechaHasta: $fechaHasta
+        }
+    })
+    .done(function(response){
+        $table = "<table class='table table-hover table-stripped'><thead><tr><th>Monto</th><th>Cantidad de Vehiculos</th></tr></thead><tbody>";
+            $.each($.parseJSON(response), function() {
+                $table += "<tr>";
+                $table += "<td>$" + this.costo + "</td>";
+                $table += "<td>" + this.vehiculos + "</td>";
+                $table += "</tr>";
+            });
+            $table += "</tbody></table>";
+
+            $("#estadisticas").html($table);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
+}
 
 function traerEstadisticasCochera(){
     $.ajax({
@@ -572,6 +617,22 @@ function traerEstadisticasVehiculo(){
         alert(response.responseText);
     });
 }
+
+// function exportarVehiculoPDF(){
+//     $.ajax({
+//         url: $url,
+//         type: "POST",
+//         data: {
+//             accion: "exportarVehiculoPDF"
+//         }
+//     })
+//     .done(function(response){
+//         // $("#principal").html(response);
+//     })
+//     .fail(function(response){
+//         alert(response.responseText);
+//     });
+// }
 
 function filtrarEstadisticasVehiculo(){
     $fechaDesde = $("#fechaDesde").data('datepicker').getFormattedDate('yyyy-mm-dd 00:00:00');

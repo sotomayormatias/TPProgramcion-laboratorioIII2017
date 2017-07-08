@@ -94,6 +94,7 @@ switch($accion){
         $cochera = Cochera::TraerCocheraPorNro($nroCochera);
 
         $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : NULL;
+        
         $operacion = new Operacion(null, $cochera, $vehiculo, 0, date("Y-m-d H:i:s"), null, $usuario, null);
         Operacion::Guardar($operacion);
         include("modulos/grillaCocheras.php");
@@ -108,6 +109,7 @@ switch($accion){
         break;
 
     case "finalizarOperacion":
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : NULL;
         $idOperacion = isset($_POST['idOperacion']) ? $_POST['idOperacion'] : NULL;
         $costo = isset($_POST['costo']) ? $_POST['costo'] : NULL;
@@ -145,6 +147,16 @@ switch($accion){
         echo Usuario::traerFichajes($fechaDesde, $fechaHasta);
         break;
 
+    case "traerEstadisticasCaja":
+        include("modulos/estadisticasCaja.php");
+        break;
+
+    case "filtrarEstadisticasCaja":
+        $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
+        $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
+        echo Operacion::TraerCaja($fechaDesde, $fechaHasta);
+        break;
+    
     case "traerEstadisticasCochera":
         include("modulos/estadisticasCochera.php");
         break;
@@ -164,6 +176,15 @@ switch($accion){
         $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
         echo Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
         break;
+
+    // case "exportarVehiculoPDF":
+    //     $estadisticas = Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
+    //     include("mpdf/mpdf.php");
+    //     $mpdf=new mPDF('c'); 
+
+    //     $mpdf->WriteHTML("hola mundo");
+    //     $mpdf->Output("prueba.pdf", "F");
+    //     break;
 
     default:
         echo ":(";

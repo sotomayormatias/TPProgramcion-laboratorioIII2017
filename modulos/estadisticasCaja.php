@@ -1,10 +1,10 @@
 <?php 
-    $json = Vehiculo::TraerEstadisticas(NULL, NULL);
-    $estadisticas = json_decode($json);
+    $json = Operacion::TraerCaja(NULL, NULL);
+    $resultados = json_decode($json);
 ?>
 
-<h1>Estadísticas de Vehículos</h1>
-<form method="POST" onsubmit="filtrarEstadisticasVehiculo(); return false;" class="form-inline">
+<h1>Estadísticas de Caja</h1>
+<form method="POST" onsubmit="filtrarEstadisticasCaja(); return false;" class="form-inline">
     <div class="filtro">
         <div class="form-group">
             <label for="fechaDesde">Desde</label>
@@ -30,31 +30,20 @@
     </div>
 </form>
 
-<!--<div class="form-group">
-    <input onclick="exportarVehiculoPDF()" type="button" class="btn btn-success btn-sm btn-flat" value="Exportar PDF"/>
-</div>-->
 <div id="estadisticas">
     <table class="table table-hover table-stripped" >
         <thead>
             <tr>
-                <th>Patente</th>
-                <th>Marca</th>
-                <th>Cochera</th>
-                <th>Ingreso</th>
-                <th>Egreso</th>
-                <th>Costo</th>
+                <th>Monto</th>
+                <th>Cantidad de Vehiculos</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            foreach ($estadisticas as $estadistica) {
+            foreach ($resultados as $resultado) {
                 echo "<tr>
-                        <td>".$estadistica->patente."</td>
-                        <td>".$estadistica->marca."</td>
-                        <td>".$estadistica->cochera."</td>
-                        <td>".$estadistica->ingreso."</td>
-                        <td>".$estadistica->egreso."</td>
-                        <td> $".$estadistica->costo."</td>
+                        <td>$".$resultado->costo."</td>
+                        <td>".$resultado->vehiculos."</td>
                     </tr>";
             }
             ?>

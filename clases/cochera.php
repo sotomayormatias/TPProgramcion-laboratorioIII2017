@@ -481,7 +481,7 @@ class Cochera
 		}
 	}
 
-	public static function TraerUsosPorTipo($fechaDesde, $fechaHasta, $tipo){
+	public static function TraerUsosReservadas($fechaDesde, $fechaHasta){
 		$usadas = array();
 
 		try {
@@ -503,8 +503,46 @@ class Cochera
 
 			$query .= ") AS T1
 						ON T1.idcochera = C.idCochera
-						WHERE C.idTipo = ".$tipo.
-						" GROUP BY C.idCochera";
+						WHERE C.idTipo = 2  GROUP BY C.idCochera";
+
+			$consulta = $objConexion->retornarConsulta($query);
+			
+			$consulta->execute();
+			while($fila = $consulta->fetch(PDO::FETCH_ASSOC))
+			{
+				$usadas[] = $fila;
+			}
+			
+			return json_encode($usadas);
+		}
+		catch(Exception  $e){
+			return json_encode($e->getMessage());
+		}
+	}
+
+	public static function TraerUsosComunes($fechaDesde, $fechaHasta){
+		$usadas = array();
+
+		try {
+			$objConexion = Conexion::getConexion();
+			
+			$query = "SELECT 	
+						C.idCochera, 
+						C.numero, 
+						C.piso, 
+						COUNT(CASE WHEN T1.idCochera IS NOT NULL THEN 1 END) as cantVehiculos 
+					FROM cochera C 
+					LEFT JOIN 
+					(SELECT O.idcochera
+					FROM operaciones O";
+			
+			if($fechaDesde != NULL and $fechaHasta != NULL){
+				$query .= " WHERE O.ingreso > '".$fechaDesde."' AND O.egreso < '".$fechaHasta."'";
+			}
+
+			$query .= ") AS T1
+						ON T1.idcochera = C.idCochera
+						WHERE C.idTipo = 1 GROUP BY C.idCochera";
 
 			$consulta = $objConexion->retornarConsulta($query);
 			

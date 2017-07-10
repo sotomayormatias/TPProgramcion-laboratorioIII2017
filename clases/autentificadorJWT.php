@@ -9,7 +9,7 @@
         public static function crearToken($datos){
             $ahora = time();
             $payload = array('iat' => $ahora, 
-                            'exp' => $ahora + 300, 
+                            'exp' => $ahora + (60 * 60 * 24), 
                             'data' => $datos, 
                             'app' => "apirestjwt");
 

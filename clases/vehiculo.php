@@ -225,7 +225,7 @@ class Vehiculo
 		}
 	}
 
-	public static function TraerEstadiasPorVehiculo($fechaDesde, $fechaHasta, $idVehiculo){
+	public static function TraerEstadiasPorVehiculo($fechaDesde, $fechaHasta){
 		$estadias = array();
 
 		try{

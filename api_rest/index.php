@@ -9,6 +9,7 @@ require_once '../clases/cocheraApi.php';
 require_once '../clases/usuarioApi.php';
 require_once '../clases/operacionApi.php';
 require_once '../clases/vehiculoApi.php';
+require_once '../clases/estadisticasApi.php';
 require_once '../clases/MWParaAutenticar.php';
 
 $app = new \Slim\App;
@@ -44,6 +45,10 @@ $app->group('/vehiculo', function () {
   $this->post('[/]', \VehiculoApi::class . ':CargarUno');
   $this->delete('/{id}', \VehiculoApi::class . ':BorrarUno');
   $this->put('[/]', \VehiculoApi::class . ':ModificarUno');
+})->add(\MWParaAutenticar::class . ':VerificarUsuario');
+
+$app->group('/estadisticas', function () {
+  $this->post('/{accion}', \EstadisticasApi::class . ':Traer');
 })->add(\MWParaAutenticar::class . ':VerificarUsuario');
 
 $app->run();

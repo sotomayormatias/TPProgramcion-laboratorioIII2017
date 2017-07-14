@@ -680,3 +680,34 @@ function focusTabs($index){
             break;
     }
 }
+
+// FINAL
+// function filtrarVehiculos(){
+//     $.ajax({
+//         url: $url,
+//         type: "POST",
+//         data: {
+//             accion: "filtrarVehiculos"
+//         }
+//     })
+//     .done(function(response){
+//         $filtro = $("#patente").val();
+//         $jsonData = $.parseJSON(response);
+//         $filterData = $jsonData.filter(function(vehiculo){
+//             return vehiculo.patente.includes($filtro);
+//         });
+
+//         $tbody = "";
+//         $.each($filterData, function() {
+//             $tbody += "<tr>";
+//             $tbody += "<td>" + this.patente + "</td>";
+//             $tbody += "<td>" + this.marca + "</td>";
+//             $tbody += "<td>" + this.color + "</td>";
+//             $tbody += "</tr>";
+//         });
+//         $(".table tbody").html($tbody);
+//     })
+//     .fail(function(response){
+//         alert(response.responseText);
+//     });
+// }

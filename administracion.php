@@ -177,13 +177,9 @@ switch($accion){
         echo Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
         break;
 
-    // case "exportarVehiculoPDF":
-    //     $estadisticas = Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
-    //     include("mpdf/mpdf.php");
-    //     $mpdf=new mPDF('c'); 
-
-    //     $mpdf->WriteHTML("hola mundo");
-    //     $mpdf->Output("prueba.pdf", "F");
+    // FINAL
+    // case "filtrarVehiculos":
+    //     echo json_encode(Vehiculo::TraerTodosLosVehiculos());
     //     break;
 
     default:

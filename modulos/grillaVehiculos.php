@@ -4,6 +4,12 @@ $arrayDeVehiculos = Vehiculo::TraerTodosLosVehiculos();
 ?>
 
 <h1>Vehículos</h1>
+<!--FINAL-->
+<!--<div class="filtro">
+    <div class="form-group col-md-4 col-md-offset-4">
+        <input onkeyup="filtrarVehiculos()" type="text" name="patente" id="patente" placeholder="Patente" class="form-control" pattern="^[a-zA-Z]{2,3}[0-9]{3}([a-zA-Z]{2})?$"/>
+    </div>
+</div>-->
 <?php
 if(count($arrayDeVehiculos) > 0){
 ?>

@@ -27,7 +27,11 @@
         <input type="text" name="password" id="password" placeholder="Password" class="form-control" required/>
     </div>
     <div class="form-group">
+        <input class="form-control" type="file" name="foto" id="foto" onchange="previsualizarFoto()">
+    </div>
+    <div class="form-group">
         <input type="submit" class="btn btn-primary btn-block btn-sm btn-flat" value="Agregar"/>
     </div>
     <div class="help-block with-errors"></div>
+    <div id="divFoto"></div>
 </form>

@@ -120,6 +120,7 @@ function agregarUsuario(){
     $usuario.turno = $("#turno").val();
     $usuario.password = $("#password").val();
     $usuario.rol = 2;
+    $usuario.archivo = $("#hdnArchivoTemp").val();
 
     $.ajax({
         url: $url,
@@ -145,6 +146,7 @@ function editarUsuario($id){
     $usuario.turno = $("#turno").val();
     $usuario.password = $("#password").val();
     $usuario.rol = 2;
+    $usuario.archivo = $("#hdnArchivoTemp").val();
 
     $.ajax({
         url: $url,
@@ -679,6 +681,56 @@ function focusTabs($index){
             $("#tabTransacciones").addClass("active");
             break;
     }
+}
+
+
+function previsualizarFoto(){
+    var archivo = $("#foto")[0];
+    var formData = new FormData();
+    formData.append("archivo", archivo.files[0]);
+    formData.append("accion", "previsualizarFoto");
+
+    var $request = new XMLHttpRequest();
+    $request.onreadystatechange = function(){
+        if($request.readyState == 4 && $request.status == 200){
+            $("#divFoto").html(JSON.parse($request.responseText).html);
+        }
+    };
+    $request.open("POST", $url, true);
+    $request.send(formData);
+}
+
+function deshacerFoto($path){
+    var formData = new FormData();
+    formData.append("accion", "deshacerFoto");
+    formData.append("pathFoto", $path);
+
+    var $request = new XMLHttpRequest();
+    $request.onreadystatechange = function(){
+        if($request.readyState == 4 && $request.status == 200){
+            $("#divFoto").html("");
+            $("#foto").val("");
+            $("#hdnArchivoTmp").val("");
+        }
+    };
+    $request.open("POST", $url, true);
+    $request.send(formData);
+}
+
+function TraerEstadiasPorVehiculo(){
+    $.ajax({
+        url: $url,
+        type: "POST",
+        data: {
+            accion: "TraerEstadiasPorVehiculo"
+        }
+    })
+    .done(function(response){
+        $("#principal").html(response);
+    })
+    .fail(function(response){
+        alert(response.responseText);
+    });
 }
 
 // FINAL

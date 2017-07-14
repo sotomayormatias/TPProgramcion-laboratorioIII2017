@@ -29,6 +29,14 @@
         <input type="text" name="password" id="password" placeholder="Password" class="form-control" value="<?php echo $empleado->getPassword(); ?>" required/>
     </div>
     <div class="form-group">
+        <input class="form-control" type="file" name="foto" id="foto" onchange="previsualizarFoto()">
+    </div>
+    <div class="form-group">
         <input type="submit" class="btn btn-primary btn-block" value="Guardar"/>
+    </div>
+    <div id="divFoto">
+        <img src="tmp/<?php echo $empleado->getPathFoto() ?>" class="imgMuestra">
+        <br><input type="button" value="Deshacer" onclick="deshacerFoto('<?php echo $empleado->getPathFoto() ?>')" class="btn btn-danger">
+        <input type="hidden" id="hdnArchivoTemp" value="<?php echo $empleado->getPathFoto() ?>">
     </div>
 </form>

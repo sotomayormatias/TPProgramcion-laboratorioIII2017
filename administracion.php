@@ -28,7 +28,7 @@ switch($accion){
     case "agregarUsuario":
         $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
 
-        $usuario = new Usuario(null, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno);
+        $usuario = new Usuario(null, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, 1, $obj->archivo);
         Usuario::Guardar($usuario);
 
         include("modulos/grillaEmpleados.php");
@@ -38,7 +38,8 @@ switch($accion){
         $obj = isset($_POST['usuario']) ? json_decode(json_encode($_POST['usuario'])) : NULL;
 
         $usuarioConEstado = Usuario::TraerUsuarioPorId($obj->id);
-        $usuario = new Usuario($obj->id, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, $usuarioConEstado->GetEstado());
+        unlink("img/".$usuarioConEstado->getPathFoto());
+        $usuario = new Usuario($obj->id, $obj->nombre, $obj->correo, $obj->password, $obj->rol, $obj->turno, $usuarioConEstado->GetEstado(), $obj->archivo);
         Usuario::Modificar($usuario);
 
         include("modulos/grillaEmpleados.php");
@@ -175,6 +176,27 @@ switch($accion){
         $fechaDesde = isset($_POST['fechaDesde']) ? $_POST['fechaDesde'] : NULL;
         $fechaHasta = isset($_POST['fechaHasta']) ? $_POST['fechaHasta'] : NULL;
         echo Vehiculo::TraerEstadisticas($fechaDesde, $fechaHasta);
+        break;
+
+    case "previsualizarFoto":
+        $tipoArchivo = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+        $archivo_tmp = date("Ymd_His"). "." . $tipoArchivo;
+        $destino = "tmp/". $archivo_tmp;
+        move_uploaded_file($_FILES["archivo"]["tmp_name"], $destino);
+        $response["html"] = "<img src='".$destino."' class='imgMuestra'>
+                            <br><input type='button' value='Deshacer' onclick='deshacerFoto(\"".$destino."\")' class='btn btn-danger'>
+                            <input type='hidden' id='hdnArchivoTemp' value='".$archivo_tmp."' />";
+        // var_dump($response);
+        echo json_encode($response);
+        break;
+
+    case "deshacerFoto":
+        $path = $_POST["pathFoto"];
+        unlink($path);
+        break;
+
+    case "TraerEstadiasPorVehiculo":
+        include("modulos/estadiasPorVehiculo.php");
         break;
 
     // FINAL

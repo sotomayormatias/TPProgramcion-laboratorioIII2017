@@ -243,7 +243,9 @@ class Vehiculo
 				$query .= " WHERE O.ingreso > '".$fechaDesde."' AND O.egreso < '".$fechaHasta."'";
 			}
 
-			$query .= " GROUP BY V.idvehiculo";
+			$query .= " GROUP BY V.idvehiculo
+						ORDER BY cantEstadias desc
+						LIMIT 5";
 
 			$consulta = $objConexion->retornarConsulta($query);
 

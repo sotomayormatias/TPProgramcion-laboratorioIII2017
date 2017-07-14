@@ -64,6 +64,7 @@
                   <li><a onclick="traerEstadisticasCochera()">Cocheras</a></li>
                   <li><a onclick="traerEstadisticasVehiculo()">Vehiculos</a></li>
                   <li><a onclick="traerEstadisticasCaja()">Caja</a></li>
+                  <li><a onclick="TraerEstadiasPorVehiculo()">TOP 5 Vehiculos</a></li>
                 </ul>
               <?php } ?>
               </li>

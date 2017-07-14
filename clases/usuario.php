@@ -13,6 +13,7 @@ class Usuario
     public $rol;
     public $turno;
     public $estado;
+    public $pathFoto;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -45,6 +46,10 @@ class Usuario
 	{
 		return $this->estado;
 	}
+	public function GetPathFoto()
+	{
+		return $this->pathFoto;
+	}
 
 //--SETTERS
 	public function SetNombre($valor)
@@ -71,10 +76,14 @@ class Usuario
 	{
 		$this->estado = $valor;
 	}
+	public function SetPathFoto($valor)
+	{
+		$this->pathFoto = $valor;
+	}
 
 //--------------------------------------------------------------------------------//
 //--CONSTRUCTOR
-	public function __construct($id=NULL, $nombre=NULL, $correo=NULL, $password=NULL, $rol=NULL, $turno=NULL, $estado=NULL)
+	public function __construct($id=NULL, $nombre=NULL, $correo=NULL, $password=NULL, $rol=NULL, $turno=NULL, $estado=NULL, $pathFoto=NULL)
 	{
 		$this->id = $id;
         $this->nombre = $nombre;
@@ -83,6 +92,7 @@ class Usuario
         $this->rol = $rol;
         $this->turno = $turno;
         $this->estado = $estado;
+        $this->pathFoto = $pathFoto;
 	}
 
 //--------------------------------------------------------------------------------//
@@ -97,10 +107,13 @@ class Usuario
 			$password = $obj->GetPassword();
 			$rol = $obj->GetRol();
 			$turno = $obj->GetTurno();
+			$pathFoto = $obj->GetPathFoto();
 
 			$objConexion = Conexion::getConexion();
-			$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, idRol, idTurno, estado) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.", 1)");
+			$consulta = $objConexion->retornarConsulta("INSERT INTO usuario(nombre, correo, password, idRol, idTurno, estado, pathFoto) VALUES('".$nombre."', '".$correo."', '".$password."', ".$rol.", ".$turno.", 1, '".$pathFoto."')");
 			$cant = $consulta->execute();
+			
+        	copy("tmp/".$pathFoto, "img/".$pathFoto);
 			
 			if($cant > 0)
 			{
@@ -155,7 +168,8 @@ class Usuario
 																R.descripcion as descRol,
 																U.idTurno,
 																T.descripcion as descTurno,
-																U.estado
+																U.estado,
+																U.pathFoto
 														FROM usuario U
 														INNER JOIN rol R
 														ON U.idRol = R.idRol
@@ -167,7 +181,7 @@ class Usuario
 
 			$rol = new Rol($fila['idRol'], $fila['descRol']);
 			$turno = new Turno($fila['idTurno'], $fila['descTurno']);
-			$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno, $fila['estado']);
+			$usuario = new Usuario($fila['idUsuario'], $fila['nombre'], $fila['correo'],$fila['password'], $rol, $turno, $fila['estado'], $fila['pathFoto']);
 			
 			return $usuario;
 		}
@@ -285,11 +299,15 @@ class Usuario
 			$rol = $obj->GetRol();
 			$turno = $obj->GetTurno();
 			$estado = $obj->GetEstado();
+			$pathFoto = $obj->GetPathFoto();
 
 			$objConexion = Conexion::getConexion();
-			$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = ".$rol.", idTurno = ".$turno.", estado = ".$estado." WHERE idUsuario = ".$id);
+			$consulta = $objConexion->retornarConsulta("UPDATE usuario SET nombre = '".$nombre."', correo = '".$correo."', password = '".$password."', idRol = ".$rol.", idTurno = ".$turno.", estado = ".$estado.", pathFoto = '".$pathFoto."' WHERE idUsuario = ".$id);
 			$cant = $consulta->execute();
-				
+			
+			if(file_exists("tmp/".$pathFoto)){
+        		copy("tmp/".$pathFoto, "img/".$pathFoto);
+			}
 			if($cant < 1)
 			{
 				$resultado = FALSE;
@@ -311,6 +329,9 @@ class Usuario
 			$resultado = TRUE;
 			
 			$objConexion = Conexion::getConexion();
+			$usuario = Usuario::TraerUsuarioPorId($id);
+        	unlink("img/".$usuario->getPathFoto());
+
 			$consulta = $objConexion->retornarConsulta("DELETE FROM usuario WHERE idUsuario = ".$id);
 			$cant = $consulta->execute();
 			
